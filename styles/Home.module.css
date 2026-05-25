@@ -42,26 +42,21 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes nadar {
-  from { transform: translateX(0); }
-  to { transform: translateX(calc(100vw + 100px)); }
-}
-
 .page {
   position: relative;
   overflow: hidden;
-  /* Gradiente azul rico: navy profundo no topo descendo
-     suavemente para o azul claro do mar — inspirado na referência. */
+  /* Gradiente azul ~20% mais claro (cada parada misturada com 20% de branco)
+     em relação à paleta original navy → mar. */
   background: linear-gradient(180deg,
-    #013a63 0%,
-    #01497c 12%,
-    #014f86 22%,
-    #2a6f97 35%,
-    #468faf 50%,
-    #61a5c2 62%,
-    #0096c7 78%,
-    #0077b6 90%,
-    #023e8a 100%);
+    #346182 0%,
+    #346d96 12%,
+    #34729e 22%,
+    #558cac 35%,
+    #6ba5bf 50%,
+    #81b7ce 62%,
+    #33abd2 78%,
+    #3392c5 90%,
+    #3565a1 100%);
 }
 
 /* =========== NAVBAR =========== */
@@ -73,11 +68,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 32px;
-  /* Fundo azul claro translúcido com blur */
-  background: rgba(173, 232, 244, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(2, 62, 138, 0.15);
+  /* Fundo laranja em degradê — mesma direção/cores do "Verão" do hero
+     (amarelo-sol no topo descendo para laranja-vivo). */
+  background: linear-gradient(180deg, var(--amarelo-sol), var(--laranja-vivo));
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
 }
 
 .logo {
@@ -89,15 +83,10 @@
   font-weight: 700;
 }
 
-/* Texto do logo BRANCO com leve sombra azul para legibilidade */
+/* Texto do logo BRANCO com sombra quente para destacar sobre o laranja */
 .logoTexto {
   color: #ffffff;
-  text-shadow: 0 2px 6px rgba(2, 62, 138, 0.35);
-}
-
-.logoIcon {
-  font-size: 1.8rem;
-  animation: flutuar 3s ease-in-out infinite;
+  text-shadow: 0 2px 6px rgba(150, 50, 0, 0.45);
 }
 
 .navLinks {
@@ -106,7 +95,7 @@
   list-style: none;
 }
 
-/* Links da navegação em AZUL PROFUNDO */
+/* Links da navegação em AZUL PROFUNDO sobre o fundo laranja */
 .navLinks a {
   font-weight: 700;
   position: relative;
@@ -704,7 +693,8 @@
 .mar {
   position: relative;
   height: 260px;
-  background: linear-gradient(180deg, #0096c7 0%, #023e8a 100%);
+  /* Mesmo clareamento de ~20% aplicado ao restante do fundo */
+  background: linear-gradient(180deg, #33abd2 0%, #3565a1 100%);
   overflow: hidden;
 }
 
@@ -737,22 +727,6 @@
   animation: onda 12s linear infinite;
 }
 
-.peixe {
-  position: absolute;
-  font-size: 1.8rem;
-  bottom: 60px;
-  animation: nadar 14s linear infinite;
-}
-
-.peixe1 { left: -50px; animation-delay: 0s; }
-.peixe2 { left: -120px; bottom: 110px; font-size: 1.4rem; animation-duration: 18s; animation-delay: 3s; }
-.peixe3 { left: -80px; bottom: 30px; font-size: 1.6rem; animation-duration: 22s; animation-delay: 7s; }
-
-@keyframes nadar {
-  from { transform: translateX(0); }
-  to { transform: translateX(calc(100vw + 100px)); }
-}
-
 /* =========== FOOTER (AREIA) =========== */
 .footer {
   position: relative;
@@ -770,7 +744,7 @@
   left: 0;
   width: 100%;
   height: 40px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'><path d='M0,20 Q150,0 300,20 T600,20 T900,20 T1200,20 L1200,0 L0,0 Z' fill='%23023e8a'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'><path d='M0,20 Q150,0 300,20 T600,20 T900,20 T1200,20 L1200,0 L0,0 Z' fill='%233565a1'/></svg>");
   background-repeat: repeat-x;
   background-size: 1200px 40px;
 }
@@ -827,19 +801,6 @@
   margin-bottom: 10px;
 }
 
-.itensPraia {
-  position: absolute;
-  bottom: 20px;
-  display: flex;
-  gap: 20px;
-  font-size: 2.2rem;
-  z-index: 1;
-  opacity: 0.85;
-}
-
-.itensPraiaEsq { left: 30px; }
-.itensPraiaDir { right: 30px; }
-
 .copyright {
   position: relative;
   z-index: 2;
@@ -879,10 +840,6 @@
   .hero { padding: 60px 18px 120px; min-height: 80vh; }
 
   .secao { padding: 60px 18px; }
-
-  .itensPraia { font-size: 1.6rem; gap: 14px; }
-  .itensPraiaEsq { left: 16px; }
-  .itensPraiaDir { right: 16px; }
 
   .footerConteudo { gap: 28px; text-align: center; }
 

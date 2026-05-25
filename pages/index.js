@@ -70,7 +70,6 @@ export default function Home() {
         {/* ============== NAVBAR ============== */}
         <nav className={styles.navbar}>
           <div className={styles.logo}>
-            <span className={styles.logoIcon}>🍦</span>
             <span className={styles.logoTexto}>Olé Sacolé</span>
           </div>
           <ul className={styles.navLinks}>
@@ -102,7 +101,7 @@ export default function Home() {
             </p>
             <div className={styles.botoesHero}>
               <a href="#produtos" className={styles.btnPrimario}>
-                Ver Sabores 🍦
+                Ver Sabores
               </a>
               <a href="#como-pedir" className={styles.btnSecundario}>
                 Como Pedir 🛒
@@ -144,9 +143,7 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.sobreVisual}>
-              <div className={styles.circuloSobre} aria-hidden="true">
-                🍦
-              </div>
+              <div className={styles.circuloSobre} aria-hidden="true" />
             </div>
           </div>
         </section>
@@ -249,23 +246,13 @@ export default function Home() {
           <div className={`${styles.ondaMar} ${styles.ondaMar1}`} />
           <div className={`${styles.ondaMar} ${styles.ondaMar2}`} />
           <div className={`${styles.ondaMar} ${styles.ondaMar3}`} />
-          <span className={`${styles.peixe} ${styles.peixe1}`}>🐠</span>
-          <span className={`${styles.peixe} ${styles.peixe2}`}>🐟</span>
-          <span className={`${styles.peixe} ${styles.peixe3}`}>🐡</span>
         </div>
 
         {/* ============== FOOTER (AREIA) ============== */}
         <footer className={styles.footer}>
-          <span className={`${styles.itensPraia} ${styles.itensPraiaEsq}`} aria-hidden="true">
-            🐚 🌴 ⛱️
-          </span>
-          <span className={`${styles.itensPraia} ${styles.itensPraiaDir}`} aria-hidden="true">
-            🏖️ 🦀 🐚
-          </span>
-
           <div className={styles.footerConteudo}>
             <div className={styles.footerColuna}>
-              <div className={styles.footerLogoArea}>🍦 Olé Sacolé</div>
+              <div className={styles.footerLogoArea}>Olé Sacolé</div>
               <p>O sabor de verão que cabe no bolso. Geladinho do jeitinho que você ama!</p>
             </div>
             <div className={styles.footerColuna}>
