@@ -1,0 +1,85 @@
+/* =============================================
+   GLOBALS — Olé Sacolé
+   ============================================= */
+
+/* --- Design Tokens (CSS Variables) --- */
+:root {
+  --orange:       #FF6B2B;
+  --orange-light: #FF8C42;
+  --orange-pale:  #FFF0E8;
+  --sun:          #FFD166;
+  --sun-glow:     #FFAA00;
+  --ocean-deep:   #023E8A;
+  --ocean-mid:    #0077B6;
+  --ocean-light:  #00B4D8;
+  --ocean-pale:   #90E0EF;
+  --sky:          #CAF0F8;
+  --sand:         #F4E4BC;
+  --sand-mid:     #E8C97D;
+  --sand-dark:    #C9A84C;
+  --white:        #FFFFFF;
+  --text-dark:    #1A1A2E;
+  --text-mid:     #444466;
+  --radius:       16px;
+  --shadow:       0 8px 32px rgba(0,0,0,0.12);
+  --transition:   0.3s ease;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #023E8A;
+  color: #1A1A2E;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(255, 107, 43, 0.25);
+  color: #1A1A2E;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #023E8A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #FF6B2B, #FFD166);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #FF8C42, #FFD166);
+}
