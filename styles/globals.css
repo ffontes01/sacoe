@@ -1,31 +1,40 @@
-/* =============================================
-   GLOBALS — Olé Sacolé
-   ============================================= */
+/* =========================================================
+   Olé Sacolé — Estilos globais
+   Tema: Sol & Mar | Paleta: laranja + azul
+   ========================================================= */
 
-/* --- Design Tokens (CSS Variables) --- */
 :root {
-  --orange:       #FF6B2B;
-  --orange-light: #FF8C42;
-  --orange-pale:  #FFF0E8;
-  --sun:          #FFD166;
-  --sun-glow:     #FFAA00;
-  --ocean-deep:   #023E8A;
-  --ocean-mid:    #0077B6;
-  --ocean-light:  #00B4D8;
-  --ocean-pale:   #90E0EF;
-  --sky:          #CAF0F8;
-  --sand:         #F4E4BC;
-  --sand-mid:     #E8C97D;
-  --sand-dark:    #C9A84C;
-  --white:        #FFFFFF;
-  --text-dark:    #1A1A2E;
-  --text-mid:     #444466;
-  --radius:       16px;
-  --shadow:       0 8px 32px rgba(0,0,0,0.12);
-  --transition:   0.3s ease;
+  /* Cores principais */
+  --laranja-sol: #ff8c1a;
+  --laranja-vivo: #ff6b00;
+  --laranja-claro: #ffb866;
+  --amarelo-sol: #ffd54a;
+
+  --azul-mar: #0077b6;
+  --azul-profundo: #023e8a;
+  --azul-ceu: #90e0ef;
+  --azul-claro: #caf0f8;
+
+  --areia: #f7e1a0;
+  --areia-escura: #e6c878;
+  --espuma: #ffffff;
+
+  --texto-escuro: #1b2a4a;
+  --texto-claro: #fff8ee;
+
+  /* Tipografia */
+  --fonte-titulo: 'Fredoka', 'Baloo 2', 'Comic Sans MS', system-ui, sans-serif;
+  --fonte-corpo: 'Nunito', 'Quicksand', system-ui, -apple-system, sans-serif;
+
+  /* Sombra padrão */
+  --sombra-card: 0 10px 30px rgba(2, 62, 138, 0.18);
+  --sombra-hover: 0 18px 45px rgba(255, 107, 0, 0.35);
 }
 
-*, *::before, *::after {
+/* Reset básico */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -33,53 +42,70 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #023E8A;
-  color: #1A1A2E;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--fonte-corpo);
+  color: var(--texto-escuro);
+  background: linear-gradient(180deg, var(--azul-claro) 0%, var(--azul-ceu) 100%);
+  line-height: 1.6;
   overflow-x: hidden;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-button {
-  font-family: inherit;
+  transition: color 0.25s ease, transform 0.25s ease;
 }
 
 img {
   max-width: 100%;
-  height: auto;
   display: block;
 }
 
-/* Selection color */
-::selection {
-  background: rgba(255, 107, 43, 0.25);
-  color: #1A1A2E;
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
 
-/* Scrollbar */
+/* Container util */
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Scrollbar estilizada (chrome/edge) */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #023E8A;
+  background: var(--azul-claro);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #FF6B2B, #FFD166);
-  border-radius: 4px;
+  background: linear-gradient(180deg, var(--laranja-vivo), var(--azul-mar));
+  border-radius: 999px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #FF8C42, #FFD166);
+/* Seleção */
+::selection {
+  background: var(--laranja-sol);
+  color: #fff;
 }
+
+/* NOTA: os @keyframes foram movidos para Home.module.css
+   por causa do escopamento do CSS Modules do Next.js
+   (que renomeia nomes de animações com hash, quebrando
+   a referência se o keyframe estiver em arquivo global). */
