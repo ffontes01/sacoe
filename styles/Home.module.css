@@ -428,10 +428,10 @@
   /* Descido 80px em relação ao posicionamento anterior (era -100px) */
   top: -20px;
   pointer-events: none;
-  /* filter: drop-shadow(0 8px 16px rgba(0, 60, 110, 0.25)); */
+  filter: drop-shadow(0 8px 16px rgba(0, 60, 110, 0.25));
   /* Corte ajustado para 38% — base alinhada com as linhas-guia
      que o usuário marcou (logo acima da curva inferior da bola). */
-  clip-path: inset(0 0 30% 0);
+  clip-path: inset(0 0 38% 0);
   /* Mesma animação da bola, mas com translateX(-50%) p/ manter o centro */
   animation: flutuarSacole 5s ease-in-out infinite;
 }
@@ -835,11 +835,13 @@
   transform: translateX(4px);
 }
 
-.footerLogoArea {
-  font-family: var(--fonte-titulo);
-  color: var(--laranja-vivo);
-  font-size: 1.6rem;
-  margin-bottom: 10px;
+.footerLogoImg {
+  height: 64px;
+  width: auto;
+  display: block;
+  margin-bottom: 14px;
+  /* Sombra suave para a logo "encostar" na areia sem ficar dura */
+  filter: drop-shadow(0 4px 10px rgba(60, 80, 30, 0.25));
 }
 
 .copyright {
@@ -889,6 +891,13 @@
   .secao { padding: 60px 18px; }
 
   .footerConteudo { gap: 28px; text-align: center; }
+
+  /* Centraliza a logo do footer junto com o resto do conteúdo no mobile */
+  .footerLogoImg {
+    margin-left: auto;
+    margin-right: auto;
+    height: 56px;
+  }
 
   .solContainer { width: 220px; height: 220px; top: -120px; left: -120px; }
 

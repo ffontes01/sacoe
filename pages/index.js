@@ -267,7 +267,12 @@ export default function Home() {
         <footer className={styles.footer}>
           <div className={styles.footerConteudo}>
             <div className={styles.footerColuna}>
-              <div className={styles.footerLogoArea}>Olé Sacolé</div>
+              {/* Mesmo arquivo /public/logo.svg usado no header */}
+              <img
+                src="/logo.svg"
+                alt="Olé Sacolé"
+                className={styles.footerLogoImg}
+              />
               <p>O sabor de verão que cabe no bolso. Geladinho do jeitinho que você ama!</p>
             </div>
             <div className={styles.footerColuna}>
