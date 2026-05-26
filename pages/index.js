@@ -70,7 +70,13 @@ export default function Home() {
         {/* ============== NAVBAR ============== */}
         <nav className={styles.navbar}>
           <div className={styles.logo}>
-            <span className={styles.logoTexto}>Olé Sacolé</span>
+            {/* Coloque o arquivo em /public/logo.svg
+                (o Next serve tudo de /public/ na raiz "/"). */}
+            <img
+              src="/logo.svg"
+              alt="Olé Sacolé"
+              className={styles.logoImg}
+            />
           </div>
           <ul className={styles.navLinks}>
             <li><a href="#sobre">Sobre</a></li>

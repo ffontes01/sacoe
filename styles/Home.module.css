@@ -68,25 +68,24 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 32px;
-  /* Fundo laranja em degradê — mesma direção/cores do "Verão" do hero
-     (amarelo-sol no topo descendo para laranja-vivo). */
-  background: linear-gradient(180deg, var(--amarelo-sol), var(--laranja-vivo));
-  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
+  /* Verde oliva — mesmas paradas e direção (diagonal) do gradiente do logo. */
+  background: linear-gradient(135deg, #7E9852 0%, #9BB568 100%);
+  box-shadow: 0 4px 20px rgba(60, 80, 30, 0.35);
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--fonte-titulo);
-  font-size: 1.6rem;
-  font-weight: 700;
 }
 
-/* Texto do logo BRANCO com sombra quente para destacar sobre o laranja */
-.logoTexto {
-  color: #ffffff;
-  text-shadow: 0 2px 6px rgba(150, 50, 0, 0.45);
+/* Logo em SVG — altura fixa para casar com a navbar.
+   Ajuste 'height' se quiser logo maior/menor. */
+.logoImg {
+  height: 44px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(60, 80, 30, 0.45));
 }
 
 .navLinks {
@@ -95,12 +94,13 @@
   list-style: none;
 }
 
-/* Links da navegação em AZUL PROFUNDO sobre o fundo laranja */
+/* Links da navegação em BRANCO sobre o fundo verde oliva */
 .navLinks a {
   font-weight: 700;
   position: relative;
   padding: 4px 0;
-  color: var(--azul-profundo);
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(60, 80, 30, 0.35);
 }
 
 .navLinks a::after {
@@ -110,7 +110,7 @@
   bottom: -4px;
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--azul-mar), var(--azul-profundo));
+  background: linear-gradient(90deg, #D6E1A4, #FCFAF2);
   border-radius: 999px;
   transition: width 0.3s ease;
 }
@@ -120,7 +120,7 @@
 }
 
 .navLinks a:hover {
-  color: var(--azul-mar);
+  color: #D6E1A4;
 }
 
 /* =========== HERO =========== */
@@ -835,7 +835,7 @@
 @media (max-width: 640px) {
   .navbar { padding: 12px 18px; }
   .navLinks { display: none; }
-  .logo { font-size: 1.3rem; }
+  .logoImg { height: 36px; }
 
   .hero { padding: 60px 18px 120px; min-height: 80vh; }
 

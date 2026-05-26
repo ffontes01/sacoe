@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 380" font-family="'Trebuchet MS', 'Segoe UI', sans-serif">
+  <defs>
+    <linearGradient id="bgOliva" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7E9852"/>
+      <stop offset="100%" stop-color="#9BB568"/>
+    </linearGradient>
+  </defs>
+
+  <!-- fundo retangular verde claro -->
+  <rect width="1100" height="380" rx="54" fill="url(#bgOliva)"/>
+
+  <!-- moldura sutil -->
+  <rect x="30" y="30" width="1040" height="320" rx="36" fill="none" stroke="#FCFAF2" stroke-width="2" stroke-dasharray="2 9" opacity="0.6"/>
+
+  <!-- "Olé" — conjunto centralizado, margens laterais iguais (106px) -->
+  <text x="269" y="262" text-anchor="middle" font-size="210" font-style="italic" font-weight="800" fill="#D6E1A4">Olé</text>
+
+  <!-- barra vertical centralizada no vão -->
+  <rect x="493" y="92" width="7" height="196" rx="3.5" fill="#FCFAF2"/>
+
+  <!-- "SACOLÉ" -->
+  <text x="777" y="226" text-anchor="middle" font-size="106" font-weight="700" letter-spacing="8" fill="#FCFAF2">SACOLÉ</text>
+</svg>
