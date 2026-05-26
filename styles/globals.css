@@ -22,6 +22,8 @@
   --texto-escuro: #1b2a4a;
   --texto-claro: #fff8ee;
 
+  --verde-oliva: #b1d569;
+
   /* Tipografia */
   --fonte-titulo: 'Fredoka', 'Baloo 2', 'Comic Sans MS', system-ui, sans-serif;
   --fonte-corpo: 'Nunito', 'Quicksand', system-ui, -apple-system, sans-serif;
@@ -95,7 +97,7 @@ button {
   background: var(--azul-claro);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--laranja-vivo), var(--azul-mar));
+  background: linear-gradient(180deg, var(--verde-oliva), var(--azul-mar));
   border-radius: 999px;
 }
 

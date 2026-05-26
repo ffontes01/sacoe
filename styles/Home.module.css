@@ -317,8 +317,9 @@
   color: var(--azul-profundo);
 }
 
+/* Destaque na MESMA cor do título — azul-profundo único */
 .secaoTitulo span {
-  color: var(--laranja-vivo);
+  color: var(--azul-profundo);
 }
 
 .secaoSubtitulo {
