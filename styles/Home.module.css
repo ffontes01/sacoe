@@ -393,8 +393,18 @@
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, var(--amarelo-sol), var(--laranja-sol), var(--laranja-vivo));
-  box-shadow: 0 25px 60px rgba(255, 107, 0, 0.4);
+  /* Esfera "gelo" — branco quase puro no brilho, descendo para azuis frios */
+  background: radial-gradient(
+    circle at 30% 30%,
+    #d1edee 0%,
+    #bee5ee 18%,
+    var(--azul-claro) 45%,
+    var(--azul-ceu) 75%,
+    #489ee4 100%
+  );
+  box-shadow:
+    0 25px 60px rgba(0, 119, 182, 0.35),
+    inset 0 -10px 30px rgba(0, 119, 182, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
