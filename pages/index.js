@@ -98,7 +98,7 @@ export default function Home() {
 
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitulo}>
-              Sabor de <span>Verão</span><br />
+              Sabor do <span>Verão</span><br />
               em cada Sacolé!
             </h1>
             <p className={styles.heroSubtitulo}>
