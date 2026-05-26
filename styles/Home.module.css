@@ -387,20 +387,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Permite a imagem do sacolé "subir" por cima do container */
+  overflow: visible;
 }
 
 .circuloSobre {
+  position: relative;
+  z-index: 2;          /* Fica NA FRENTE da imagem do sacolé */
   width: 320px;
   height: 320px;
   border-radius: 50%;
   /* Esfera "gelo" — branco quase puro no brilho, descendo para azuis frios */
   background: radial-gradient(
     circle at 30% 30%,
-    #d1edee 0%,
-    #bee5ee 18%,
+    #ffffff 0%,
+    #e6f7fb 18%,
     var(--azul-claro) 45%,
     var(--azul-ceu) 75%,
-    #489ee4 100%
+    #48cae4 100%
   );
   box-shadow:
     0 25px 60px rgba(0, 119, 182, 0.35),
@@ -410,6 +414,32 @@
   justify-content: center;
   font-size: 7rem;
   animation: flutuar 5s ease-in-out infinite;
+}
+
+/* Imagem real do sacolé — fica NA FRENTE da bola de gelo.
+   Parte superior sai POR CIMA da bola; 25% inferiores cortados via clip-path.
+   Flutua na MESMA cadência da bola (mesma duração/timing/keyframes). */
+.sacoleFoto {
+  position: absolute;
+  z-index: 3;          /* NA FRENTE da bola (.circuloSobre tem z-index: 2) */
+  height: 520px;       /* maior que a bola (320px) — topo passa por cima */
+  width: auto;
+  left: 50%;
+  /* Descido 80px em relação ao posicionamento anterior (era -100px) */
+  top: -20px;
+  pointer-events: none;
+  /* filter: drop-shadow(0 8px 16px rgba(0, 60, 110, 0.25)); */
+  /* Corte ajustado para 38% — base alinhada com as linhas-guia
+     que o usuário marcou (logo acima da curva inferior da bola). */
+  clip-path: inset(0 0 30% 0);
+  /* Mesma animação da bola, mas com translateX(-50%) p/ manter o centro */
+  animation: flutuarSacole 5s ease-in-out infinite;
+}
+
+/* Igual ao 'flutuar' usado pela bola, mas mantém o translateX(-50%) que centraliza */
+@keyframes flutuarSacole {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-12px); }
 }
 
 /* =========== SABORES EM DESTAQUE =========== */
@@ -838,6 +868,12 @@
     width: 240px;
     height: 240px;
     font-size: 5rem;
+  }
+
+  .sacoleFoto {
+    height: 400px;
+    top: 30px;            /* desceu 80px também no mobile (era -50) */
+    /* O 'transform' continua sendo gerenciado pela animação flutuarSacole */
   }
 
   .solContainer { width: 280px; height: 280px; top: -150px; left: -150px; }

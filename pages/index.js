@@ -149,6 +149,15 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.sobreVisual}>
+              {/* Coloque o arquivo em /public/sacole.png
+                  (PNG com fundo transparente fica melhor).
+                  Ajuste height/bottom em .sacoleFoto para mudar
+                  quanto da imagem fica coberto pela bola de gelo. */}
+              <img
+                src="/sacole.png"
+                alt="Sacolé Olé"
+                className={styles.sacoleFoto}
+              />
               <div className={styles.circuloSobre} aria-hidden="true" />
             </div>
           </div>
