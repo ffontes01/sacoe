@@ -121,7 +121,7 @@ export default function Home() {
           <div className={styles.sobreGrid}>
             <div className={styles.sobreTexto}>
               <h2 className={styles.secaoTitulo}>
-                Sobre a <span>Olé Sacolé</span>
+                Sobre a <span>Olé</span>
               </h2>
               <p>
                 Nascemos entre as praias da Região dos Lagos, amamos praia e o
