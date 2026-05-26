@@ -6,34 +6,71 @@ import styles from '../styles/Home.module.css';
 // Edite os links dos produtos em PRODUTOS abaixo
 // ============================================
 
+// Imagens dos produtos: coloque em /public/produtos/ com os nomes
+// sacoleproduto1.png ... sacoleproduto9.png (PNG transparente fica melhor).
 const PRODUTOS = [
   {
     nome: 'Sacolé de Manga',
-    emoji: '🥭',
+    imagem: '/produtos/sacoleproduto1.png',
     descricao: 'Manga madurinha, doce na medida certa. Um verão tropical em cada mordida!',
     preco: 'R$ 5,00',
-    link: 'https://marketplace.com/seu-produto-manga', // <-- substitua pelo seu link
+    link: 'https://marketplace.com/seu-produto-manga',
   },
   {
     nome: 'Sacolé de Coco',
-    emoji: '🥥',
+    imagem: '/produtos/sacoleproduto2.png',
     descricao: 'Coco fresquinho com leite cremoso. Pura brisa de praia gelada!',
     preco: 'R$ 5,00',
     link: 'https://marketplace.com/seu-produto-coco',
   },
   {
     nome: 'Sacolé de Maracujá',
-    emoji: '🍋',
+    imagem: '/produtos/sacoleproduto3.png',
     descricao: 'Azedinho na medida, refrescante e perfeito pros dias quentes.',
     preco: 'R$ 4,50',
     link: 'https://marketplace.com/seu-produto-maracuja',
   },
   {
     nome: 'Sacolé de Limão',
-    emoji: '🍈',
+    imagem: '/produtos/sacoleproduto4.png',
     descricao: 'Clássico que nunca falha. Geladinho que mata a sede de verdade!',
     preco: 'R$ 4,00',
     link: 'https://marketplace.com/seu-produto-limao',
+  },
+  {
+    nome: 'Sacolé 5',
+    imagem: '/produtos/sacoleproduto5.png',
+    descricao: 'Edite com a descrição do sabor.',
+    preco: 'R$ 0,00',
+    link: 'https://marketplace.com/seu-produto-5',
+  },
+  {
+    nome: 'Sacolé 6',
+    imagem: '/produtos/sacoleproduto6.png',
+    descricao: 'Edite com a descrição do sabor.',
+    preco: 'R$ 0,00',
+    link: 'https://marketplace.com/seu-produto-6',
+  },
+  {
+    nome: 'Sacolé 7',
+    imagem: '/produtos/sacoleproduto7.png',
+    descricao: 'Edite com a descrição do sabor.',
+    preco: 'R$ 0,00',
+    link: 'https://marketplace.com/seu-produto-7',
+  },
+  {
+    nome: 'Sacolé 8',
+    imagem: '/produtos/sacoleproduto8.png',
+    descricao: 'Edite com a descrição do sabor.',
+    preco: 'R$ 0,00',
+    link: 'https://marketplace.com/seu-produto-8',
+  },
+  {
+    nome: 'Sacolé 9',
+    imagem: '/produtos/sacoleproduto9.png',
+    descricao: 'Edite com a descrição do sabor.',
+    preco: 'R$ 0,00',
+    link: 'https://marketplace.com/seu-produto-9',
   },
 ];
 
@@ -57,7 +94,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Olé Sacolé — Sabor de Verão Geladinho!</title>
+        <title>Olé Sacolé — Sabor do Verão!</title>
         <meta name="description" content="Olé Sacolé: sacolés artesanais com sabor de praia. Encontre nossos sabores nos principais marketplaces." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -100,12 +137,12 @@ export default function Home() {
 
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitulo}>
-              Sabor de <span>Verão</span><br />
+              Sabor do <span>Verão</span><br />
               em cada Sacolé!
             </h1>
             <p className={styles.heroSubtitulo}>
-              Geladinhos artesanais feitos com frutas de verdade e muito carinho.
-              É o pedacinho de praia que você leva pra casa! 🌊☀️
+              Geladinhos tropicais e artesanais feitos com frutas de
+             verdade e muito carinho.🌊☀️
             </p>
             <div className={styles.botoesHero}>
               <a href="#produtos" className={styles.btnPrimario}>
@@ -123,21 +160,20 @@ export default function Home() {
           <div className={styles.sobreGrid}>
             <div className={styles.sobreTexto}>
               <h2 className={styles.secaoTitulo}>
-                Sobre a <span>Olé Sacolé</span>
+                Sobre a <span>Olé</span>
               </h2>
               <p>
-                Nascemos do amor pelo verão e por aquele momento mágico de
-                tomar um sacolé geladinho na beira do mar. Cada um dos nossos
-                sabores é feito artesanalmente, com frutas selecionadas e
-                receitas de família.
+                Nascemos entre as praias da Região dos Lagos, amamos praia e o 
+                Verão. Cada um dos nossos sabores é feito artesanalmente e com 
+                ingredientes selecionados.
               </p>
               <p>
-                Acreditamos que felicidade tem gosto de fruta gelada — e é isso
-                que queremos entregar em cada mordida! 🌞
+                Acreditamos que felicidade tem gosto de fruta gelada — e é isso 
+                que queremos entregar! 🌞 Vai um sacolé ?
               </p>
               <div className={styles.sobreStats}>
                 <div className={styles.stat}>
-                  <div className={styles.statNumero}>+20</div>
+                  <div className={styles.statNumero}>+10</div>
                   <div className={styles.statLabel}>Sabores</div>
                 </div>
                 <div className={styles.stat}>
@@ -145,7 +181,7 @@ export default function Home() {
                   <div className={styles.statLabel}>Natural</div>
                 </div>
                 <div className={styles.stat}>
-                  <div className={styles.statNumero}>+5k</div>
+                  <div className={styles.statNumero}>+100</div>
                   <div className={styles.statLabel}>Clientes felizes</div>
                 </div>
               </div>
@@ -171,7 +207,7 @@ export default function Home() {
             Sabores em <span>Destaque</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Os queridinhos do verão direto da nossa cozinha pra você!
+            Os queridinhos do verão direto pra você!
           </p>
           <div className={styles.saboresGrid}>
             {SABORES_DESTAQUE.map((sabor, i) => (
@@ -194,13 +230,17 @@ export default function Home() {
             Nossos <span>Sacolés</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Clique e compre direto no nosso marketplace 🛍️
+            Clique e compre direto no link 🛍️
           </p>
           <div className={styles.produtosGrid}>
             {PRODUTOS.map((produto, i) => (
               <article key={i} className={styles.produtoCard}>
-                <div className={styles.produtoImagem} aria-hidden="true">
-                  {produto.emoji}
+                <div className={styles.produtoImagem}>
+                  <img
+                    src={produto.imagem}
+                    alt={produto.nome}
+                    className={styles.produtoImg}
+                  />
                 </div>
                 <div className={styles.produtoInfo}>
                   <h3 className={styles.produtoNome}>{produto.nome}</h3>
@@ -252,13 +292,13 @@ export default function Home() {
             Manda mensagem pra gente nas redes sociais!
           </p>
           <div className={styles.redesSociais}>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="Instagram">📸</a>
+            <a href="https://instagram.com/olesacoleoficial" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="Instagram">📸</a>
             <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="WhatsApp">💬</a>
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="Facebook">👍</a>
             <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="TikTok">🎵</a>
           </div>
-          <a href="mailto:contato@olesacole.com.br" className={styles.contatoEmail}>
-            📧 contato@olesacole.com.br
+          <a href="mailto:olesacole@gmail.com" className={styles.contatoEmail}>
+            📧 olesacole@gmail.com
           </a>
         </section>
 
@@ -279,7 +319,7 @@ export default function Home() {
                 alt="Olé Sacolé"
                 className={styles.footerLogoImg}
               />
-              <p>O sabor de verão que cabe no bolso. Geladinho do jeitinho que você ama!</p>
+              <p>O sabor do verão, direto pra você!</p>
             </div>
             <div className={styles.footerColuna}>
               <h4>Navegação</h4>
@@ -290,20 +330,20 @@ export default function Home() {
             </div>
             <div className={styles.footerColuna}>
               <h4>Contato</h4>
-              <p>📧 contato@olesacole.com.br</p>
+              <p>📧 olesacole@gmail.com</p>
               <p>📱 (00) 00000-0000</p>
-              <p>📍 Brasil</p>
+              <p>📍 Peró - Cabo Frio</p>
             </div>
             <div className={styles.footerColuna}>
               <h4>Siga a gente</h4>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+              <a href="https://instagram.com/olesacoleoficial" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
               <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
               <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
             </div>
           </div>
 
           <div className={styles.copyright}>
-            © {new Date().getFullYear()} Olé Sacolé — Feito com ☀️ e 🌊 para você
+            © {new Date().getFullYear()} Olé Sacolé — Feito entre ☀️ e 🌊
           </div>
         </footer>
       </div>
