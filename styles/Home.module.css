@@ -413,7 +413,7 @@
   align-items: center;
   justify-content: center;
   font-size: 7rem;
-  animation: flutuar 5s ease-in-out infinite;
+  animation: flutuar 10s ease-in-out infinite;
 }
 
 /* Imagem real do sacolé — fica NA FRENTE da bola de gelo.
@@ -428,12 +428,12 @@
   /* Descido 80px em relação ao posicionamento anterior (era -100px) */
   top: -20px;
   pointer-events: none;
-  filter: drop-shadow(0 8px 16px rgba(0, 60, 110, 0.25));
+  /* filter: drop-shadow(0 8px 16px rgba(0, 60, 110, 0.25)); */
   /* Corte ajustado para 38% — base alinhada com as linhas-guia
      que o usuário marcou (logo acima da curva inferior da bola). */
-  clip-path: inset(0 0 38% 0);
+  clip-path: inset(0 0 28% 0);
   /* Mesma animação da bola, mas com translateX(-50%) p/ manter o centro */
-  animation: flutuarSacole 5s ease-in-out infinite;
+  animation: flutuarSacole 10s ease-in-out infinite;
 }
 
 /* Igual ao 'flutuar' usado pela bola, mas mantém o translateX(-50%) que centraliza */

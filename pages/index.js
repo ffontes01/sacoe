@@ -102,8 +102,8 @@ export default function Home() {
               em cada Sacolé!
             </h1>
             <p className={styles.heroSubtitulo}>
-              Geladinhos artesanais feitos com frutas de verdade e muito carinho.
-              É o pedacinho de praia que você leva pra casa! 🌊☀️
+              Geladinhos tropicais e artesanais feitos com frutas de verdade e muito carinho.
+              
             </p>
             <div className={styles.botoesHero}>
               <a href="#produtos" className={styles.btnPrimario}>
@@ -124,14 +124,14 @@ export default function Home() {
                 Sobre a <span>Olé Sacolé</span>
               </h2>
               <p>
-                Nascemos do amor pelo verão e por aquele momento mágico de
-                tomar um sacolé geladinho na beira do mar. Cada um dos nossos
-                sabores é feito artesanalmente, com frutas selecionadas e
-                receitas de família.
+                Nascemos entre as praias da Região dos Lagos, amamos praia e o
+                Verão. Cada um dos nossos sabores é feito artesanalmente e 
+                com ingredientes selecionados.
               </p>
               <p>
                 Acreditamos que felicidade tem gosto de fruta gelada — e é isso
-                que queremos entregar em cada mordida! 🌞
+                que queremos entregar! 🌞
+                Vai um sacolé ?
               </p>
               <div className={styles.sobreStats}>
                 <div className={styles.stat}>
@@ -169,7 +169,7 @@ export default function Home() {
             Sabores em <span>Destaque</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Os queridinhos do verão direto da nossa cozinha pra você!
+            Os queridinhos do verão direto pra você!
           </p>
           <div className={styles.saboresGrid}>
             {SABORES_DESTAQUE.map((sabor, i) => (
@@ -188,7 +188,7 @@ export default function Home() {
             Nossos <span>Sacolés</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Clique e compre direto no nosso marketplace 🛍️
+            Clique e compre direto no link 🛍️
           </p>
           <div className={styles.produtosGrid}>
             {PRODUTOS.map((produto, i) => (
@@ -246,13 +246,13 @@ export default function Home() {
             Manda mensagem pra gente nas redes sociais!
           </p>
           <div className={styles.redesSociais}>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="Instagram">📸</a>
+            <a href="https://instagram.com/olesacoleoficial" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="Instagram">📸</a>
             <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="WhatsApp">💬</a>
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="Facebook">👍</a>
             <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="TikTok">🎵</a>
           </div>
-          <a href="mailto:contato@olesacole.com.br" className={styles.contatoEmail}>
-            📧 contato@olesacole.com.br
+          <a href="mailto:olesacole@gmail.com" className={styles.contatoEmail}>
+            📧 olesacole@gmail.com
           </a>
         </section>
 
@@ -273,7 +273,8 @@ export default function Home() {
                 alt="Olé Sacolé"
                 className={styles.footerLogoImg}
               />
-              <p>O sabor de verão que cabe no bolso. Geladinho do jeitinho que você ama!</p>
+              <p>O sabor do verão, direto pra você!
+              </p>
             </div>
             <div className={styles.footerColuna}>
               <h4>Navegação</h4>
@@ -284,20 +285,20 @@ export default function Home() {
             </div>
             <div className={styles.footerColuna}>
               <h4>Contato</h4>
-              <p>📧 contato@olesacole.com.br</p>
+              <p>📧 olesacole@gmail.com</p>
               <p>📱 (00) 00000-0000</p>
-              <p>📍 Brasil</p>
+              <p>📍 Peró - Cabo Frio</p>
             </div>
             <div className={styles.footerColuna}>
               <h4>Siga a gente</h4>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+              <a href="https://instagram.com/olesacoleofficial" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
               <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
               <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
             </div>
           </div>
 
           <div className={styles.copyright}>
-            © {new Date().getFullYear()} Olé Sacolé — Feito com ☀️ e 🌊 para você
+            © {new Date().getFullYear()} Olé Sacolé — Feito entre ☀️ e 🌊 
           </div>
         </footer>
       </div>
