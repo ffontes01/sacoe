@@ -31,8 +31,13 @@ export const BAIRROS_TEXTO =
 
 export const SITE_URL = 'https://www.olesacole.com.br';
 
-// Monta o link do WhatsApp com uma mensagem já escrita
+// Mensagem padrão dos botões de WhatsApp (fora da página de pedido)
+export const MENSAGEM_GERAL = 'Olá! 👋 Quero fazer um pedido.';
+
+// Monta o link do WhatsApp com uma mensagem já escrita.
+// Usa api.whatsapp.com/send (e não wa.me): o wa.me troca emojis por "�"
+// em alguns aparelhos e no WhatsApp do computador.
 export function linkWhatsApp(mensagem) {
-  const base = `https://wa.me/${WHATSAPP_NUMERO}`;
-  return mensagem ? `${base}?text=${encodeURIComponent(mensagem)}` : base;
+  const base = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMERO}`;
+  return mensagem ? `${base}&text=${encodeURIComponent(mensagem)}` : base;
 }
