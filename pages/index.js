@@ -19,6 +19,7 @@ import {
   EMAIL,
   IFOOD_URL,
   INSTAGRAM_URL,
+  MENSAGEM_GERAL,
   PEDIDO_MINIMO,
   SITE_URL,
   WHATSAPP_EXIBICAO,
@@ -39,8 +40,6 @@ const PASSOS = [
   { numero: 3, icone: '🛵', titulo: 'Receba em casa', texto: `A gente confirma o pedido e entrega no ${BAIRROS_TEXTO}.` },
   { numero: 4, icone: '🏖️', titulo: 'Aproveite!', texto: 'Sacolé geladinho na mão. É verão o ano inteiro!' },
 ];
-
-const MENSAGEM_GERAL = 'Olá, Olé Sacolé! 👋 Vim pelo site e quero fazer um pedido.';
 
 function varsLinha(linha) {
   return { '--cor-linha': linha.cor, '--cor-linha-clara': linha.corClara };

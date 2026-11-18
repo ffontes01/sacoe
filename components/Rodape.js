@@ -4,11 +4,10 @@ import {
   IFOOD_URL,
   INSTAGRAM_URL,
   LOCALIZACAO,
+  MENSAGEM_GERAL,
   WHATSAPP_EXIBICAO,
   linkWhatsApp,
 } from '../data/config';
-
-const MENSAGEM_GERAL = 'Olá, Olé Sacolé! 👋 Vim pelo site e quero fazer um pedido.';
 
 const LINKS_RODAPE = [
   { href: '/#sobre', label: 'Sobre' },
