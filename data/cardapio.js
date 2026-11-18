@@ -22,7 +22,7 @@ export const LINHAS = [
     id: 'raiz',
     nome: 'Raiz',
     slogan: 'Os clássicos com gosto de infância.',
-    preco: null,
+    preco: 6,
     cor: '#C17A2C',
     corClara: '#FBEBD5',
     sabores: [
@@ -40,7 +40,7 @@ export const LINHAS = [
     nome: 'Olé',
     selo: 'Assinatura',
     slogan: 'A linha da casa: tudo com Nutella.',
-    preco: null,
+    preco: 8,
     cor: '#7E9852',
     corClara: '#EEF3DC',
     sabores: [
@@ -53,7 +53,7 @@ export const LINHAS = [
     id: 'reserva',
     nome: 'Reserva',
     slogan: 'Sabores especiais pra quem quer ir além.',
-    preco: null,
+    preco: 8,
     cor: '#A63D52',
     corClara: '#F8E3E7',
     sabores: [
@@ -67,7 +67,7 @@ export const LINHAS = [
     nome: 'Da Fruta',
     titulo: 'Linha da Fruta',
     slogan: 'Refrescantes, pra matar a sede no sol.',
-    preco: null,
+    preco: 5,
     cor: '#178FA8',
     corClara: '#DDF3F7',
     sabores: [
@@ -101,6 +101,10 @@ export const SABORES = LINHAS.flatMap((linha) =>
 );
 
 export const TOTAL_SABORES = SABORES.length;
+
+// Menor preço entre as linhas (para o "a partir de")
+const PRECOS = LINHAS.map((l) => l.preco).filter((v) => v != null);
+export const PRECO_MINIMO = PRECOS.length ? Math.min(...PRECOS) : null;
 
 export function formatarPreco(valor) {
   return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });

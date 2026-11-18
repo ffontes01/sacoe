@@ -1533,3 +1533,35 @@
   justify-content: center;
   margin-top: 8px;
 }
+
+/* Preço no card de cada linha: etiqueta no canto */
+.linhaCard {
+  position: relative;
+}
+
+.linhaCardPreco {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--laranja-vivo);
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 1.05rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+}
+
+@media (max-width: 640px) {
+  .linhaCardPreco {
+    top: 12px;
+    right: 12px;
+    padding: 2px 10px;
+    font-size: 0.95rem;
+    background: var(--cor-linha-clara);
+    box-shadow: none;
+  }
+}

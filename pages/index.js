@@ -13,7 +13,7 @@ import {
   IconeMenos,
   IconeSacola,
 } from '../components/Icones';
-import { LINHAS, TOTAL_SABORES, formatarPreco, idSabor, tituloLinha } from '../data/cardapio';
+import { LINHAS, PRECO_MINIMO, TOTAL_SABORES, formatarPreco, idSabor, tituloLinha } from '../data/cardapio';
 import { EMAIL, IFOOD_URL, INSTAGRAM_URL, SITE_URL, WHATSAPP_EXIBICAO, linkWhatsApp } from '../data/config';
 import { plural, usePedido } from '../lib/pedido';
 
@@ -108,7 +108,10 @@ export default function Home() {
               </a>
             </div>
             <p className={styles.heroCanais}>
-              {TOTAL_SABORES} sabores · 4 linhas · {IFOOD_URL ? 'WhatsApp e iFood' : 'Em breve no iFood'}
+              {TOTAL_SABORES} sabores
+              {PRECO_MINIMO != null && ` · a partir de ${formatarPreco(PRECO_MINIMO)}`}
+              {' · '}
+              {IFOOD_URL ? 'WhatsApp e iFood' : 'Em breve no iFood'}
             </p>
           </div>
         </section>
@@ -185,6 +188,9 @@ export default function Home() {
                   <span className={styles.linhaVer}>
                     Ver {linha.sabores.length} sabores →
                   </span>
+                  {linha.preco != null && (
+                    <span className={styles.linhaCardPreco}>{formatarPreco(linha.preco)}</span>
+                  )}
                 </div>
               </a>
             ))}
