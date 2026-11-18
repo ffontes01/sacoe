@@ -1,45 +1,31 @@
 import Head from 'next/head';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import Navbar from '../components/Navbar';
+import Rodape from '../components/Rodape';
 import SacoleIcon from '../components/SacoleIcon';
 import {
   IconeCamera,
   IconeChat,
   IconeEmail,
-  IconeFechar,
   IconeLocal,
   IconeMais,
   IconeMenos,
-  IconeMenu,
   IconeSacola,
 } from '../components/Icones';
-import { LINHAS, TOTAL_SABORES, formatarPreco, idSabor } from '../data/cardapio';
-import {
-  EMAIL,
-  IFOOD_URL,
-  INSTAGRAM_URL,
-  LOCALIZACAO,
-  SITE_URL,
-  WHATSAPP_EXIBICAO,
-  linkWhatsApp,
-} from '../data/config';
+import { LINHAS, TOTAL_SABORES, formatarPreco, idSabor, tituloLinha } from '../data/cardapio';
+import { EMAIL, IFOOD_URL, INSTAGRAM_URL, SITE_URL, WHATSAPP_EXIBICAO, linkWhatsApp } from '../data/config';
+import { plural, usePedido } from '../lib/pedido';
 
 // ============================================
 // Olé Sacolé — Página Inicial
 // Cardápio e preços: data/cardapio.js
 // WhatsApp, iFood e redes: data/config.js
+// Página de pedido: pages/pedido.js
 // ============================================
 
-const NAV = [
-  { href: '#sobre', label: 'Sobre' },
-  { href: '#linhas', label: 'Linhas' },
-  { href: '#cardapio', label: 'Cardápio' },
-  { href: '#como-pedir', label: 'Como Pedir' },
-  { href: '#contato', label: 'Contato' },
-];
-
 const PASSOS = [
-  { numero: 1, icone: '🍦', titulo: 'Escolha seus sabores', texto: 'Navegue pelas 4 linhas e toque no + pra montar seu pedido.' },
+  { numero: 1, icone: '🍦', titulo: 'Monte seu pedido', texto: 'Escolha os sabores e as quantidades na página de pedido.' },
   { numero: 2, icone: '💬', titulo: 'Envie no WhatsApp', texto: 'A mensagem já vai prontinha, com os sabores e as quantidades.' },
   { numero: 3, icone: '🤝', titulo: 'Combine com a gente', texto: 'A gente confirma o pedido, o valor e a entrega ou retirada.' },
   { numero: 4, icone: '🏖️', titulo: 'Aproveite!', texto: 'Sacolé geladinho na mão. É verão o ano inteiro!' },
@@ -47,88 +33,13 @@ const PASSOS = [
 
 const MENSAGEM_GERAL = 'Olá, Olé Sacolé! 👋 Vim pelo site e quero fazer um pedido.';
 
-// Lista "achatada" de todos os sabores, para montar o pedido
-const SABORES = LINHAS.flatMap((linha) =>
-  linha.sabores.map((sabor) => ({ id: idSabor(linha, sabor), linha, sabor }))
-);
-
-const CHAVE_PEDIDO = 'ole-sacole-pedido';
-
-function plural(n, singular, pluralTexto) {
-  return n === 1 ? singular : pluralTexto;
-}
-
-function montarMensagem(itens, totalQtd, totalValor) {
-  const linhasPedido = itens.map(
-    (i) => `• ${i.qtd}x ${i.sabor.nome} (linha ${i.linha.nome})`
-  );
-  const total =
-    `Total: ${totalQtd} ${plural(totalQtd, 'sacolé', 'sacolés')}` +
-    (totalValor != null ? ` — ${formatarPreco(totalValor)}` : '');
-
-  return [
-    'Olá, Olé Sacolé! 👋 Quero fazer um pedido:',
-    '',
-    ...linhasPedido,
-    '',
-    total,
-    '',
-    'Nome:',
-    'Entrega ou retirada:',
-  ].join('\n');
-}
-
 function varsLinha(linha) {
   return { '--cor-linha': linha.cor, '--cor-linha-clara': linha.corClara };
 }
 
 export default function Home() {
-  const [menuAberto, setMenuAberto] = useState(false);
   const [filtro, setFiltro] = useState('todas');
-  const [pedido, setPedido] = useState({}); // { idDoSabor: quantidade }
-
-  // Guarda o pedido no navegador, pra não perder se a pessoa recarregar a página
-  useEffect(() => {
-    try {
-      const salvo = JSON.parse(window.localStorage.getItem(CHAVE_PEDIDO) || '{}');
-      const validos = Object.fromEntries(
-        Object.entries(salvo).filter(
-          ([id, qtd]) => SABORES.some((s) => s.id === id) && Number.isInteger(qtd) && qtd > 0
-        )
-      );
-      setPedido(validos);
-    } catch (e) {
-      /* sem armazenamento disponível — segue sem salvar */
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(CHAVE_PEDIDO, JSON.stringify(pedido));
-    } catch (e) {
-      /* ignora */
-    }
-  }, [pedido]);
-
-  const itens = useMemo(
-    () => SABORES.filter((s) => pedido[s.id] > 0).map((s) => ({ ...s, qtd: pedido[s.id] })),
-    [pedido]
-  );
-  const totalQtd = itens.reduce((soma, i) => soma + i.qtd, 0);
-  const todosComPreco = itens.length > 0 && itens.every((i) => i.linha.preco != null);
-  const totalValor = todosComPreco
-    ? itens.reduce((soma, i) => soma + i.qtd * i.linha.preco, 0)
-    : null;
-
-  function alterar(id, delta) {
-    setPedido((atual) => {
-      const qtd = Math.max(0, Math.min(99, (atual[id] || 0) + delta));
-      const novo = { ...atual };
-      if (qtd === 0) delete novo[id];
-      else novo[id] = qtd;
-      return novo;
-    });
-  }
+  const { pedido, itens, totalQtd, totalValor, alterar, limpar } = usePedido();
 
   // Troca o filtro e, se a pessoa já rolou pra dentro do cardápio,
   // volta pro começo dele (senão a lista "some" debaixo dela)
@@ -149,7 +60,7 @@ export default function Home() {
         <title>Olé Sacolé — Sacolés artesanais | Peça pelo WhatsApp</title>
         <meta
           name="description"
-          content={`Olé Sacolé: ${TOTAL_SABORES} sabores de sacolé artesanal nas linhas Raiz, Olé, Reserva e Fruta. Monte seu pedido e envie pelo WhatsApp.`}
+          content={`Olé Sacolé: ${TOTAL_SABORES} sabores de sacolé artesanal nas linhas Raiz, Olé, Reserva e da Fruta. Monte seu pedido e envie pelo WhatsApp.`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="canonical" href={SITE_URL} />
@@ -169,38 +80,7 @@ export default function Home() {
       </Head>
 
       <div className={styles.page} data-pedido={temPedido ? 'sim' : 'nao'}>
-        {/* ============== NAVBAR ============== */}
-        <nav className={styles.navbar} aria-label="Navegação principal">
-          <a href="#topo" className={styles.logo} aria-label="Olé Sacolé — início">
-            <img src="/logo.svg" alt="Olé Sacolé" className={styles.logoImg} />
-          </a>
-
-          <ul className={`${styles.navLinks} ${menuAberto ? styles.navLinksAberto : ''}`} id="menu-principal">
-            {NAV.map((item) => (
-              <li key={item.href}>
-                <a href={item.href} onClick={() => setMenuAberto(false)}>
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <div className={styles.navAcoes}>
-            <a href="#cardapio" className={styles.navPedir}>
-              Pedir agora
-            </a>
-            <button
-              type="button"
-              className={styles.navToggle}
-              aria-expanded={menuAberto}
-              aria-controls="menu-principal"
-              aria-label={menuAberto ? 'Fechar menu' : 'Abrir menu'}
-              onClick={() => setMenuAberto((v) => !v)}
-            >
-              {menuAberto ? <IconeFechar /> : <IconeMenu />}
-            </button>
-          </div>
-        </nav>
+        <Navbar paginaAtual="inicio" />
 
         {/* ============== HERO ============== */}
         <section className={styles.hero} id="topo">
@@ -220,16 +100,11 @@ export default function Home() {
               Sacolés artesanais, cremosos e de fruta, feitos com muito carinho. 🌊☀️
             </p>
             <div className={styles.botoesHero}>
-              <a href="#cardapio" className={styles.btnPrimario}>
-                Ver Cardápio
+              <a href="/pedido" className={styles.btnPrimario}>
+                Monte seu pedido
               </a>
-              <a
-                href={linkWhatsApp(MENSAGEM_GERAL)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.btnSecundario}
-              >
-                <IconeChat /> Pedir no WhatsApp
+              <a href="#cardapio" className={styles.btnSecundario}>
+                Ver Cardápio
               </a>
             </div>
             <p className={styles.heroCanais}>
@@ -322,7 +197,8 @@ export default function Home() {
             Nosso <span>Cardápio</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Toque no <strong>+</strong> pra montar seu pedido e enviar direto no WhatsApp. 💬
+            Toque no <strong>+</strong> pra ir separando os sabores, ou{' '}
+            <a href="/pedido" className={styles.linkTexto}>monte seu pedido</a> de uma vez. 💬
           </p>
 
           <div className={styles.filtros} role="group" aria-label="Filtrar por linha">
@@ -352,7 +228,7 @@ export default function Home() {
             <div key={linha.id} className={styles.linhaBloco} style={varsLinha(linha)}>
               <div className={styles.linhaCabecalho}>
                 <h3 className={styles.linhaBlocoTitulo}>
-                  Linha {linha.nome}
+                  {tituloLinha(linha)}
                   {linha.selo && <span className={styles.linhaSelo}>{linha.selo}</span>}
                 </h3>
                 <p className={styles.linhaBlocoSlogan}>{linha.slogan}</p>
@@ -416,6 +292,12 @@ export default function Home() {
               </div>
             </div>
           ))}
+
+          <div className={styles.cardapioCta}>
+            <a href="/pedido" className={styles.btnPrimario}>
+              Monte seu pedido →
+            </a>
+          </div>
         </section>
 
         {/* ============== COMO PEDIR ============== */}
@@ -442,15 +324,17 @@ export default function Home() {
               <div className={styles.canalIcone}><IconeChat width={28} height={28} /></div>
               <h3>WhatsApp</h3>
               <p>Pedidos e encomendas especiais.</p>
+              <a href="/pedido" className={styles.canalBtn}>
+                Monte seu pedido
+              </a>
               <a
                 href={linkWhatsApp(MENSAGEM_GERAL)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.canalBtn}
+                className={styles.canalDetalhe}
               >
-                Chamar no WhatsApp
+                ou chame no {WHATSAPP_EXIBICAO}
               </a>
-              <span className={styles.canalDetalhe}>{WHATSAPP_EXIBICAO}</span>
             </div>
 
             <div className={`${styles.canalCard} ${styles.canalIfood}`}>
@@ -510,50 +394,9 @@ export default function Home() {
           </a>
         </section>
 
-        {/* ============== MAR (final do body) ============== */}
-        <div className={styles.mar} aria-hidden="true">
-          <div className={`${styles.ondaMar} ${styles.ondaMar1}`} />
-          <div className={`${styles.ondaMar} ${styles.ondaMar2}`} />
-          <div className={`${styles.ondaMar} ${styles.ondaMar3}`} />
-        </div>
+        <Rodape />
 
-        {/* ============== FOOTER (AREIA) ============== */}
-        <footer className={styles.footer}>
-          <div className={styles.footerConteudo}>
-            <div className={styles.footerColuna}>
-              <img src="/logo.svg" alt="Olé Sacolé" className={styles.footerLogoImg} />
-              <p>O sabor do verão, direto pra você!</p>
-            </div>
-            <div className={styles.footerColuna}>
-              <h4>Navegação</h4>
-              {NAV.slice(0, 4).map((item) => (
-                <a key={item.href} href={item.href}>{item.label}</a>
-              ))}
-            </div>
-            <div className={styles.footerColuna}>
-              <h4>Contato</h4>
-              <a href={linkWhatsApp(MENSAGEM_GERAL)} target="_blank" rel="noopener noreferrer">
-                💬 {WHATSAPP_EXIBICAO}
-              </a>
-              <a href={`mailto:${EMAIL}`}>📧 {EMAIL}</a>
-              <p>📍 {LOCALIZACAO}</p>
-            </div>
-            <div className={styles.footerColuna}>
-              <h4>Siga a gente</h4>
-              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">📸 Instagram</a>
-              <a href={linkWhatsApp(MENSAGEM_GERAL)} target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
-              {IFOOD_URL && (
-                <a href={IFOOD_URL} target="_blank" rel="noopener noreferrer">🛵 iFood</a>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.copyright}>
-            © {new Date().getFullYear()} Olé Sacolé — Feito entre ☀️ e 🌊
-          </div>
-        </footer>
-
-        {/* ============== PEDIDO / WHATSAPP FIXO ============== */}
+        {/* ============== PEDIDO EM ANDAMENTO / WHATSAPP FIXO ============== */}
         {temPedido ? (
           <div className={styles.barraPedido} role="region" aria-label="Seu pedido">
             <div className={styles.barraResumo}>
@@ -566,16 +409,11 @@ export default function Home() {
                   : `${itens.length} ${plural(itens.length, 'sabor', 'sabores')}`}
               </span>
             </div>
-            <button type="button" className={styles.barraLimpar} onClick={() => setPedido({})}>
+            <button type="button" className={styles.barraLimpar} onClick={limpar}>
               Limpar
             </button>
-            <a
-              href={linkWhatsApp(montarMensagem(itens, totalQtd, totalValor))}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.barraEnviar}
-            >
-              <IconeChat /> Enviar<span className={styles.textoLongo}> no WhatsApp</span>
+            <a href="/pedido" className={styles.barraEnviar}>
+              Finalizar<span className={styles.textoLongo}> pedido</span> →
             </a>
           </div>
         ) : (
@@ -584,10 +422,10 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
             className={styles.whatsFlutuante}
-            aria-label="Pedir pelo WhatsApp"
+            aria-label="Falar no WhatsApp"
           >
             <IconeChat width={26} height={26} />
-            <span>Pedir no WhatsApp</span>
+            <span>Fale no WhatsApp</span>
           </a>
         )}
       </div>

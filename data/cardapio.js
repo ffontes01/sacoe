@@ -7,10 +7,13 @@
 //        Deixe null para não mostrar preço no site.
 //        Se você colocar preço, o total aparece no pedido do WhatsApp.
 //
+// titulo: (opcional) como a linha aparece por extenso. Se não tiver,
+//         o site usa "Linha " + nome.
+//
 // Cada sabor tem:
 //   cor     → cor do sacolé desenhado
 //   textura → detalhe por cima: 'sementes', 'pontos', 'granulado',
-//             'pedacos', 'nutella' ou null (liso)
+//             'pedacos', 'calda' (fio de calda/cobertura) ou null (liso)
 //   cor2    → cor da textura
 // ============================================
 
@@ -23,14 +26,13 @@ export const LINHAS = [
     cor: '#C17A2C',
     corClara: '#FBEBD5',
     sabores: [
-      { nome: 'Abacate', descricao: 'Cremoso, docinho e bem levinho.', cor: '#B9D36E', textura: null },
-      { nome: 'Paçoca', descricao: 'Amendoim cremoso com sabor de festa junina.', cor: '#DDB47F', textura: 'pontos', cor2: '#A7743F' },
-      { nome: 'Cocada', descricao: 'Coco cremoso com gostinho de doce de tabuleiro.', cor: '#F6ECD3', textura: 'pontos', cor2: '#D9BC86' },
-      { nome: 'Brigadeiro', descricao: 'O doce de festa, agora geladinho.', cor: '#7A452C', textura: 'granulado', cor2: '#3A1D10' },
-      { nome: 'Mousse de Morango', descricao: 'Leve, cremoso e rosinha.', cor: '#F7B5C4', textura: 'pontos', cor2: '#E05A75' },
-      { nome: 'Mousse de Maracujá', descricao: 'Azedinho e cremoso na medida.', cor: '#F8DD70', textura: 'sementes', cor2: '#3B2A12' },
-      { nome: 'Pé de moleque', descricao: 'Amendoim caramelizado em versão gelada.', cor: '#C98A40', textura: 'pedacos', cor2: '#8A5525' },
-      { nome: 'Chocolate com amendoim', descricao: 'Chocolate cremoso e amendoim, dupla clássica.', cor: '#7B4A2E', textura: 'pedacos', cor2: '#D9A96B' },
+      { nome: 'Abacate', descricao: 'Sacolé de abacate, cremoso e nutritivo.', cor: '#B9D36E', textura: null },
+      { nome: 'Paçoca', descricao: 'Sacolé de paçoca, feito de amendoim.', cor: '#DDB47F', textura: 'pontos', cor2: '#A7743F' },
+      { nome: 'Cocada', descricao: 'Base de coco com um adicional de coco tostado.', cor: '#F6ECD3', textura: 'pontos', cor2: '#C2914F' },
+      { nome: 'Mousse de Morango', descricao: 'Sacolé de mousse de morango, supercremoso.', cor: '#F7B5C4', textura: 'pontos', cor2: '#E05A75' },
+      { nome: 'Mousse de Maracujá', descricao: 'Sacolé de mousse de maracujá, supercremoso.', cor: '#F8DD70', textura: 'sementes', cor2: '#3B2A12' },
+      { nome: 'Pé de moleque', descricao: 'Base de amendoim com amendoim caramelizado.', cor: '#DDB47F', textura: 'pedacos', cor2: '#8A4E1C' },
+      { nome: 'Chocolate com amendoim', descricao: 'Base de amendoim + cacau 40%.', cor: '#8A5A3A', textura: 'pontos', cor2: '#D9A96B' },
     ],
   },
   {
@@ -42,9 +44,9 @@ export const LINHAS = [
     cor: '#7E9852',
     corClara: '#EEF3DC',
     sabores: [
-      { nome: 'Ninho com Nutella', descricao: 'Leite Ninho cremoso com Nutella.', cor: '#FBF3E4', textura: 'nutella', cor2: '#5A3220' },
-      { nome: 'Maracujá com Nutella', descricao: 'O azedinho do maracujá com Nutella.', cor: '#F8D965', textura: 'nutella', cor2: '#5A3220' },
-      { nome: 'Morango com Nutella', descricao: 'Morango e Nutella, dupla imbatível.', cor: '#F6A9B9', textura: 'nutella', cor2: '#5A3220' },
+      { nome: 'Ninho com Nutella', descricao: 'Base de Ninho com cobertura de Nutella.', cor: '#FBF3E4', textura: 'calda', cor2: '#5A3220' },
+      { nome: 'Maracujá com Nutella', descricao: 'Mousse de maracujá com cobertura de Nutella.', cor: '#F8D965', textura: 'calda', cor2: '#5A3220' },
+      { nome: 'Morango com Nutella', descricao: 'Mousse de morango com cobertura de Nutella.', cor: '#F6A9B9', textura: 'calda', cor2: '#5A3220' },
     ],
   },
   {
@@ -55,25 +57,32 @@ export const LINHAS = [
     cor: '#A63D52',
     corClara: '#F8E3E7',
     sabores: [
-      { nome: 'Romeu e Julieta', descricao: 'Queijo e goiabada, o casal mais famoso do Brasil.', cor: '#FAF0D7', textura: 'pedacos', cor2: '#B8303F' },
-      { nome: 'Tablô', descricao: 'Receita especial da casa.', cor: '#9C6B4E', textura: 'pontos', cor2: '#F3E3C8' },
+      { nome: 'Romeu e Julieta', descricao: 'Massa sabor queijo com micropedaços de queijo + calda de goiabada.', cor: '#FAF0D7', textura: 'calda', cor2: '#B8303F' },
+      { nome: 'Tablô', descricao: 'Cobertura de Galak com farinha de amendoim, massa leve de creme e recheio de chocolate.', cor: '#F4E8D0', textura: 'pontos', cor2: '#B98A55' },
+      { nome: 'Alpineiro', descricao: 'Brigadeiro intenso + granulado e sorvete de chocolate.', cor: '#6A3A24', textura: 'granulado', cor2: '#2B140A' },
     ],
   },
   {
     id: 'fruta',
-    nome: 'Fruta',
+    nome: 'Da Fruta',
+    titulo: 'Linha da Fruta',
     slogan: 'Refrescantes, pra matar a sede no sol.',
     preco: null,
     cor: '#178FA8',
     corClara: '#DDF3F7',
     sabores: [
-      { nome: 'Açaí', descricao: 'Energia de praia em forma de sacolé.', cor: '#5B2A5E', textura: null },
-      { nome: 'Manga', descricao: 'Manga madurinha, doce na medida certa.', cor: '#FFB238', textura: null },
-      { nome: 'Coco', descricao: 'Pura brisa de praia, bem geladinho.', cor: '#FFFDF6', textura: 'pontos', cor2: '#E6D8BB' },
-      { nome: 'Goiaba', descricao: 'Goiaba vermelhinha e refrescante.', cor: '#F07D86', textura: null },
+      { nome: 'Açaí', descricao: 'Sorbet de açaí com morango batido com guaraná.', cor: '#5B2A5E', textura: null },
+      { nome: 'Manga', descricao: 'Sorbet de manga natural.', cor: '#FFB238', textura: null },
+      { nome: 'Coco', descricao: 'Sacolé de coco com leite.', cor: '#FFFDF6', textura: 'pontos', cor2: '#E6D8BB' },
+      { nome: 'Goiaba', descricao: 'Sorbet de goiaba natural.', cor: '#F07D86', textura: null },
     ],
   },
 ];
+
+// "Linha Raiz", "Linha da Fruta"...
+export function tituloLinha(linha) {
+  return linha.titulo || `Linha ${linha.nome}`;
+}
 
 // Gera um id estável para cada sabor (ex.: 'raiz-pacoca')
 export function idSabor(linha, sabor) {
@@ -86,7 +95,12 @@ export function idSabor(linha, sabor) {
   return `${linha.id}-${slug}`;
 }
 
-export const TOTAL_SABORES = LINHAS.reduce((soma, l) => soma + l.sabores.length, 0);
+// Lista "achatada" de todos os sabores
+export const SABORES = LINHAS.flatMap((linha) =>
+  linha.sabores.map((sabor) => ({ id: idSabor(linha, sabor), linha, sabor }))
+);
+
+export const TOTAL_SABORES = SABORES.length;
 
 export function formatarPreco(valor) {
   return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });

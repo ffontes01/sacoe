@@ -44,7 +44,7 @@ function Textura({ tipo, cor }) {
         <rect key={i} x={x - 4} y={y - 4} width="8" height="7" rx="2.2" fill={cor} opacity="0.92"
           transform={`rotate(${(i * 37) % 90} ${x} ${y})`} />
       ));
-    case 'nutella':
+    case 'calda':
       return (
         <>
           <path d="M52 34 C72 54 30 72 50 96 C70 120 28 136 48 160 C58 172 46 184 50 196"
