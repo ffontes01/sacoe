@@ -14,7 +14,16 @@ import {
   IconeSacola,
 } from '../components/Icones';
 import { LINHAS, PRECO_MINIMO, TOTAL_SABORES, formatarPreco, idSabor, tituloLinha } from '../data/cardapio';
-import { EMAIL, IFOOD_URL, INSTAGRAM_URL, SITE_URL, WHATSAPP_EXIBICAO, linkWhatsApp } from '../data/config';
+import {
+  BAIRROS_TEXTO,
+  EMAIL,
+  IFOOD_URL,
+  INSTAGRAM_URL,
+  PEDIDO_MINIMO,
+  SITE_URL,
+  WHATSAPP_EXIBICAO,
+  linkWhatsApp,
+} from '../data/config';
 import { plural, usePedido } from '../lib/pedido';
 
 // ============================================
@@ -27,7 +36,7 @@ import { plural, usePedido } from '../lib/pedido';
 const PASSOS = [
   { numero: 1, icone: '🍦', titulo: 'Monte seu pedido', texto: 'Escolha os sabores e as quantidades na página de pedido.' },
   { numero: 2, icone: '💬', titulo: 'Envie no WhatsApp', texto: 'A mensagem já vai prontinha, com os sabores e as quantidades.' },
-  { numero: 3, icone: '🤝', titulo: 'Combine com a gente', texto: 'A gente confirma o pedido, o valor e a entrega ou retirada.' },
+  { numero: 3, icone: '🛵', titulo: 'Receba em casa', texto: `A gente confirma o pedido e entrega no ${BAIRROS_TEXTO}.` },
   { numero: 4, icone: '🏖️', titulo: 'Aproveite!', texto: 'Sacolé geladinho na mão. É verão o ano inteiro!' },
 ];
 
@@ -329,7 +338,11 @@ export default function Home() {
             <div className={`${styles.canalCard} ${styles.canalWhats}`}>
               <div className={styles.canalIcone}><IconeChat width={28} height={28} /></div>
               <h3>WhatsApp</h3>
-              <p>Pedidos e encomendas especiais.</p>
+              <p>
+                Pedido mínimo {formatarPreco(PEDIDO_MINIMO)}.
+                <br />
+                Entrega no {BAIRROS_TEXTO}.
+              </p>
               <a href="/pedido" className={styles.canalBtn}>
                 Monte seu pedido
               </a>

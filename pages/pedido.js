@@ -7,13 +7,25 @@ import Rodape from '../components/Rodape';
 import SacoleIcon from '../components/SacoleIcon';
 import { IconeChat, IconeFechar, IconeMais, IconeMenos } from '../components/Icones';
 import { LINHAS, formatarPreco, idSabor, tituloLinha } from '../data/cardapio';
-import { SITE_URL, WHATSAPP_EXIBICAO, linkWhatsApp } from '../data/config';
+import {
+  BAIRROS_ENTREGA,
+  BAIRROS_TEXTO,
+  PEDIDO_MINIMO,
+  SITE_URL,
+  WHATSAPP_EXIBICAO,
+  linkWhatsApp,
+} from '../data/config';
 import { montarMensagem, plural, usePedido } from '../lib/pedido';
 
 // ============================================
 // Olé Sacolé — Monte seu pedido (/pedido)
-// O cliente escolhe sabores e quantidades, preenche nome e entrega,
+// O cliente escolhe sabores e quantidades, preenche nome e endereço,
 // e o botão abre o WhatsApp com a mensagem pronta.
+//
+// Regras (em data/config.js):
+//   - pedido mínimo: PEDIDO_MINIMO
+//   - só entrega, nos bairros BAIRROS_ENTREGA
+//   - nome, endereço e bairro obrigatórios; ponto de referência opcional
 // ============================================
 
 function varsLinha(linha) {
@@ -23,9 +35,11 @@ function varsLinha(linha) {
 export default function PaginaPedido() {
   const { pedido, itens, totalQtd, totalValor, alterar, remover, limpar } = usePedido();
   const [nome, setNome] = useState('');
-  const [modo, setModo] = useState(''); // 'entrega' | 'retirada'
   const [endereco, setEndereco] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [referencia, setReferencia] = useState('');
   const [observacao, setObservacao] = useState('');
+  const [tentouEnviar, setTentouEnviar] = useState(false);
   const [resumoVisivel, setResumoVisivel] = useState(false);
 
   // No celular, esconde a barra de baixo quando o resumo já está na tela
@@ -40,10 +54,48 @@ export default function PaginaPedido() {
   }, []);
 
   const vazio = totalQtd === 0;
-  const mensagem = montarMensagem({ itens, totalQtd, totalValor, nome, modo, endereco, observacao });
+
+  // Pedido mínimo
+  const valor = totalValor || 0;
+  const falta = Math.max(0, PEDIDO_MINIMO - valor);
+  const atingiuMinimo = totalValor == null || falta === 0;
+  const progresso = Math.min(100, Math.round((valor / PEDIDO_MINIMO) * 100));
+
+  // Campos obrigatórios
+  const erros = {
+    nome: !nome.trim() ? 'Coloque seu nome.' : '',
+    endereco: !endereco.trim() ? 'Coloque o endereço com rua e número.' : '',
+    bairro: !bairro ? `Escolha o bairro (${BAIRROS_TEXTO}).` : '',
+  };
+  const dadosOk = !erros.nome && !erros.endereco && !erros.bairro;
+  const mostrarErro = (campo) => tentouEnviar && erros[campo];
+
+  const mensagem = montarMensagem({
+    itens,
+    totalQtd,
+    totalValor,
+    nome,
+    endereco,
+    bairro,
+    referencia,
+    observacao,
+  });
   const textoTotal =
     `${totalQtd} ${plural(totalQtd, 'sacolé', 'sacolés')}` +
     (totalValor != null ? ` · ${formatarPreco(totalValor)}` : '');
+
+  // Se faltar nome/endereço/bairro, não abre o WhatsApp: mostra o que falta
+  function aoEnviar(evento) {
+    if (dadosOk) return;
+    evento.preventDefault();
+    setTentouEnviar(true);
+    const primeiro = erros.nome ? 'campo-nome' : erros.endereco ? 'campo-endereco' : 'campo-bairro-0';
+    const el = document.getElementById(primeiro);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.focus({ preventScroll: true });
+    }
+  }
 
   return (
     <>
@@ -51,7 +103,7 @@ export default function PaginaPedido() {
         <title>Monte seu pedido — Olé Sacolé</title>
         <meta
           name="description"
-          content="Escolha seus sacolés e as quantidades e envie o pedido pronto pelo WhatsApp da Olé Sacolé."
+          content={`Escolha seus sacolés e envie o pedido pronto pelo WhatsApp da Olé Sacolé. Pedido mínimo de ${formatarPreco(PEDIDO_MINIMO)}, entrega no ${BAIRROS_TEXTO}.`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="canonical" href={`${SITE_URL}/pedido`} />
@@ -78,6 +130,10 @@ export default function PaginaPedido() {
           <p className={p.subtitulo}>
             Escolha os sabores e as quantidades. No final, a mensagem vai prontinha pro nosso
             WhatsApp. 💬
+          </p>
+          <p className={p.regras}>
+            <span>🧾 Pedido mínimo {formatarPreco(PEDIDO_MINIMO)}</span>
+            <span>🛵 Entrega só no {BAIRROS_TEXTO}</span>
           </p>
           <nav className={p.atalhos} aria-label="Ir para a linha">
             {LINHAS.map((linha) => (
@@ -187,64 +243,123 @@ export default function PaginaPedido() {
                 <strong>{textoTotal}</strong>
               </div>
 
-              <form className={p.form} onSubmit={(e) => e.preventDefault()}>
-                <label className={p.campo}>
-                  <span>Seu nome</span>
+              {/* Pedido mínimo */}
+              {totalValor != null || vazio ? (
+                <div className={p.minimo} data-ok={atingiuMinimo && !vazio ? 'sim' : 'nao'} aria-live="polite">
+                  <p>
+                    {vazio
+                      ? `Pedido mínimo: ${formatarPreco(PEDIDO_MINIMO)}`
+                      : atingiuMinimo
+                        ? '✓ Pedido mínimo atingido'
+                        : `Faltam ${formatarPreco(falta)} para o pedido mínimo de ${formatarPreco(PEDIDO_MINIMO)}`}
+                  </p>
+                  <div className={p.minimoBarra} aria-hidden="true">
+                    <span style={{ width: `${vazio ? 0 : progresso}%` }} />
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Aviso de entrega */}
+              <div className={p.aviso}>
+                <span aria-hidden="true">🛵</span>
+                <p>
+                  Só fazemos <strong>entrega</strong>, e somente nos bairros{' '}
+                  <strong>{BAIRROS_TEXTO}</strong>.
+                </p>
+              </div>
+
+              <form className={p.form} onSubmit={(e) => e.preventDefault()} noValidate>
+                <p className={p.legendaObrigatorio}>
+                  <span className={p.asterisco}>*</span> obrigatório
+                </p>
+
+                <label className={p.campo} htmlFor="campo-nome">
+                  <span>
+                    Seu nome <span className={p.asterisco}>*</span>
+                  </span>
                   <input
+                    id="campo-nome"
                     type="text"
                     value={nome}
                     onChange={(e) => setNome(e.target.value)}
-                    autoComplete="given-name"
+                    autoComplete="name"
                     placeholder="Como podemos te chamar?"
                     maxLength={60}
+                    required
+                    aria-invalid={mostrarErro('nome') ? 'true' : undefined}
+                    aria-describedby={mostrarErro('nome') ? 'erro-nome' : undefined}
+                  />
+                  {mostrarErro('nome') && <small id="erro-nome" className={p.erro}>{erros.nome}</small>}
+                </label>
+
+                <label className={p.campo} htmlFor="campo-endereco">
+                  <span>
+                    Endereço <span className={p.asterisco}>*</span>
+                  </span>
+                  <input
+                    id="campo-endereco"
+                    type="text"
+                    value={endereco}
+                    onChange={(e) => setEndereco(e.target.value)}
+                    autoComplete="street-address"
+                    placeholder="Rua e número"
+                    maxLength={160}
+                    required
+                    aria-invalid={mostrarErro('endereco') ? 'true' : undefined}
+                    aria-describedby={mostrarErro('endereco') ? 'erro-endereco' : undefined}
+                  />
+                  {mostrarErro('endereco') && (
+                    <small id="erro-endereco" className={p.erro}>{erros.endereco}</small>
+                  )}
+                </label>
+
+                <fieldset
+                  className={p.campo}
+                  aria-invalid={mostrarErro('bairro') ? 'true' : undefined}
+                  aria-describedby={mostrarErro('bairro') ? 'erro-bairro' : undefined}
+                >
+                  <legend>
+                    Bairro <span className={p.asterisco}>*</span>
+                  </legend>
+                  <div className={`${p.opcoes} ${mostrarErro('bairro') ? p.opcoesErro : ''}`}>
+                    {BAIRROS_ENTREGA.map((b, i) => (
+                      <label key={b} className={p.opcao}>
+                        <input
+                          id={`campo-bairro-${i}`}
+                          type="radio"
+                          name="bairro"
+                          value={b}
+                          checked={bairro === b}
+                          onChange={() => setBairro(b)}
+                          required
+                        />
+                        <span>📍 {b}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {mostrarErro('bairro') && <small id="erro-bairro" className={p.erro}>{erros.bairro}</small>}
+                </fieldset>
+
+                <label className={p.campo} htmlFor="campo-referencia">
+                  <span>
+                    Ponto de referência <small>(opcional)</small>
+                  </span>
+                  <input
+                    id="campo-referencia"
+                    type="text"
+                    value={referencia}
+                    onChange={(e) => setReferencia(e.target.value)}
+                    placeholder="Ex.: perto da padaria, casa de muro azul"
+                    maxLength={160}
                   />
                 </label>
 
-                <fieldset className={p.campo}>
-                  <legend>Entrega ou retirada?</legend>
-                  <div className={p.opcoes}>
-                    <label className={p.opcao}>
-                      <input
-                        type="radio"
-                        name="modo"
-                        value="entrega"
-                        checked={modo === 'entrega'}
-                        onChange={() => setModo('entrega')}
-                      />
-                      <span>🛵 Entrega</span>
-                    </label>
-                    <label className={p.opcao}>
-                      <input
-                        type="radio"
-                        name="modo"
-                        value="retirada"
-                        checked={modo === 'retirada'}
-                        onChange={() => setModo('retirada')}
-                      />
-                      <span>📍 Retirada</span>
-                    </label>
-                  </div>
-                </fieldset>
-
-                {modo === 'entrega' && (
-                  <label className={p.campo}>
-                    <span>Endereço ou ponto de referência</span>
-                    <input
-                      type="text"
-                      value={endereco}
-                      onChange={(e) => setEndereco(e.target.value)}
-                      autoComplete="street-address"
-                      placeholder="Rua, número e bairro"
-                      maxLength={160}
-                    />
-                  </label>
-                )}
-
-                <label className={p.campo}>
+                <label className={p.campo} htmlFor="campo-observacao">
                   <span>
                     Observação <small>(opcional)</small>
                   </span>
                   <textarea
+                    id="campo-observacao"
                     rows={2}
                     value={observacao}
                     onChange={(e) => setObservacao(e.target.value)}
@@ -256,7 +371,11 @@ export default function PaginaPedido() {
 
               {vazio ? (
                 <button type="button" className={p.enviar} disabled>
-                  Escolha pelo menos 1 sacolé
+                  Escolha seus sacolés
+                </button>
+              ) : !atingiuMinimo ? (
+                <button type="button" className={p.enviar} disabled>
+                  Faltam {formatarPreco(falta)} pro mínimo
                 </button>
               ) : (
                 <a
@@ -264,10 +383,18 @@ export default function PaginaPedido() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={p.enviar}
+                  onClick={aoEnviar}
                 >
                   <IconeChat /> Enviar pedido no WhatsApp
                 </a>
               )}
+
+              {tentouEnviar && !dadosOk && (
+                <p className={p.erroGeral} role="alert">
+                  Preencha nome, endereço e bairro pra gente poder entregar. 😉
+                </p>
+              )}
+
               <p className={p.ajuda}>
                 Abre o WhatsApp {WHATSAPP_EXIBICAO} com a mensagem pronta. É só tocar em enviar.
               </p>
@@ -297,7 +424,12 @@ export default function PaginaPedido() {
             aria-hidden={resumoVisivel ? 'true' : undefined}
             tabIndex={resumoVisivel ? -1 : undefined}
           >
-            <strong>{textoTotal}</strong>
+            <span className={p.barraMobileResumo}>
+              <strong>{textoTotal}</strong>
+              <small>
+                {atingiuMinimo ? 'Pedido mínimo ok ✓' : `Faltam ${formatarPreco(falta)} pro mínimo`}
+              </small>
+            </span>
             <span className={p.barraMobileAcao}>Revisar e enviar ↓</span>
           </a>
         )}

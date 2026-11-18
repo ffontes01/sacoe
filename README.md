@@ -34,9 +34,13 @@ o site mostra "Em breve no iFood".
 
 ## Como funciona o pedido
 - Na página **/pedido** ("Monte seu pedido") o cliente escolhe sabores e
-  quantidades, coloca nome, entrega ou retirada e uma observação. O botão
-  **Enviar pedido no WhatsApp** abre o (21) 99653-0559 com a mensagem pronta,
-  separada por linha, com as quantidades e o total.
+  quantidades e preenche nome, endereço e bairro (obrigatórios), ponto de
+  referência e observação (opcionais). O botão **Enviar pedido no WhatsApp**
+  abre o (21) 99653-0559 com a mensagem pronta, separada por linha, com as
+  quantidades e o total.
+- Regras (em `data/config.js`): pedido mínimo `PEDIDO_MINIMO` (R$ 20) e
+  entrega só nos bairros de `BAIRROS_ENTREGA` (Peró e Cajueiro). Não tem
+  retirada. Abaixo do mínimo ou sem nome/endereço/bairro, o botão não envia.
 - Na página inicial ele também pode ir tocando no **+** do cardápio; o botão
   **Finalizar** leva pra /pedido com tudo já escolhido (o pedido fica salvo
   no navegador dele).
