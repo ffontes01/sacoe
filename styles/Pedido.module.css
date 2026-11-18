@@ -589,3 +589,143 @@
     transition: none;
   }
 }
+
+/* =========== REGRAS DO PEDIDO (mínimo e entrega) =========== */
+.regras {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: -8px auto 22px;
+}
+
+.regras span {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(27, 42, 74, 0.55);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Barra de progresso do pedido mínimo */
+.minimo {
+  margin-bottom: 14px;
+  padding: 10px 14px 12px;
+  border-radius: 16px;
+  background: #fff6e8;
+}
+
+.minimo p {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #b25a00;
+}
+
+.minimoBarra {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 140, 26, 0.18);
+  overflow: hidden;
+}
+
+.minimoBarra span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--laranja-sol), var(--laranja-vivo));
+  transition: width 0.35s ease;
+}
+
+.minimo[data-ok='sim'] {
+  background: #eaf6ee;
+}
+
+.minimo[data-ok='sim'] p {
+  color: var(--verde-whats);
+}
+
+.minimo[data-ok='sim'] .minimoBarra span {
+  background: var(--verde-whats);
+}
+
+/* Aviso de entrega */
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 2px dashed #7E9852;
+  background: #f4f8ea;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.aviso > span {
+  font-size: 1.3rem;
+  line-height: 1.1;
+}
+
+/* Obrigatório e erros */
+.legendaObrigatorio {
+  margin-bottom: -4px;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.asterisco {
+  color: #c62828;
+  font-weight: 800;
+}
+
+.erro {
+  color: #c62828;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.campo input[aria-invalid='true'] {
+  border-color: #e05252;
+  background: #fff6f6;
+}
+
+.opcoesErro .opcao span {
+  border-color: #e05252;
+  background: #fff6f6;
+}
+
+.erroGeral {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fdecec;
+  color: #b42318;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* Barra do celular com o aviso do mínimo */
+.barraMobileResumo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  min-width: 0;
+}
+
+.barraMobileResumo small {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 640px) {
+  .regras span { font-size: 0.85rem; padding: 5px 12px; }
+  .barraMobileAcao { padding: 11px 14px; font-size: 0.9rem; }
+}

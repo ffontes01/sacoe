@@ -19,6 +19,16 @@ export const EMAIL = 'olesacole@gmail.com';
 
 export const LOCALIZACAO = 'Peró - Cabo Frio';
 
+// Regras do pedido pelo site
+export const PEDIDO_MINIMO = 20; // em reais
+export const BAIRROS_ENTREGA = ['Peró', 'Cajueiro']; // só entregamos nesses bairros
+
+// "Peró e Cajueiro" (ou "A, B e C" se tiver mais bairros)
+export const BAIRROS_TEXTO =
+  BAIRROS_ENTREGA.length > 1
+    ? `${BAIRROS_ENTREGA.slice(0, -1).join(', ')} e ${BAIRROS_ENTREGA[BAIRROS_ENTREGA.length - 1]}`
+    : BAIRROS_ENTREGA[0];
+
 export const SITE_URL = 'https://www.olesacole.com.br';
 
 // Monta o link do WhatsApp com uma mensagem já escrita
