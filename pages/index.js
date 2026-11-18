@@ -1,157 +1,118 @@
 import Head from 'next/head';
+import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import Navbar from '../components/Navbar';
+import Rodape from '../components/Rodape';
+import SacoleIcon from '../components/SacoleIcon';
+import {
+  IconeCamera,
+  IconeChat,
+  IconeEmail,
+  IconeLocal,
+  IconeMais,
+  IconeMenos,
+  IconeSacola,
+} from '../components/Icones';
+import { LINHAS, PRECO_MINIMO, TOTAL_SABORES, formatarPreco, idSabor, tituloLinha } from '../data/cardapio';
+import { EMAIL, IFOOD_URL, INSTAGRAM_URL, SITE_URL, WHATSAPP_EXIBICAO, linkWhatsApp } from '../data/config';
+import { plural, usePedido } from '../lib/pedido';
 
 // ============================================
 // Olé Sacolé — Página Inicial
-// Edite os links dos produtos em PRODUTOS abaixo
+// Cardápio e preços: data/cardapio.js
+// WhatsApp, iFood e redes: data/config.js
+// Página de pedido: pages/pedido.js
 // ============================================
 
-// Imagens dos produtos: coloque em /public/produtos/ com os nomes
-// sacoleproduto1.png ... sacoleproduto9.png (PNG transparente fica melhor).
-const PRODUTOS = [
-  {
-    nome: 'Sacolé de Manga',
-    imagem: '/produtos/sacoleproduto1.png',
-    descricao: 'Manga madurinha, doce na medida certa. Um verão tropical em cada mordida!',
-    preco: 'R$ 5,00',
-    link: 'https://marketplace.com/seu-produto-manga',
-  },
-  {
-    nome: 'Sacolé de Coco',
-    imagem: '/produtos/sacoleproduto2.png',
-    descricao: 'Coco fresquinho com leite cremoso. Pura brisa de praia gelada!',
-    preco: 'R$ 5,00',
-    link: 'https://marketplace.com/seu-produto-coco',
-  },
-  {
-    nome: 'Sacolé de Maracujá',
-    imagem: '/produtos/sacoleproduto3.png',
-    descricao: 'Azedinho na medida, refrescante e perfeito pros dias quentes.',
-    preco: 'R$ 4,50',
-    link: 'https://marketplace.com/seu-produto-maracuja',
-  },
-  {
-    nome: 'Sacolé de Limão',
-    imagem: '/produtos/sacoleproduto4.png',
-    descricao: 'Clássico que nunca falha. Geladinho que mata a sede de verdade!',
-    preco: 'R$ 4,00',
-    link: 'https://marketplace.com/seu-produto-limao',
-  },
-  {
-    nome: 'Sacolé 5',
-    imagem: '/produtos/sacoleproduto5.png',
-    descricao: 'Edite com a descrição do sabor.',
-    preco: 'R$ 0,00',
-    link: 'https://marketplace.com/seu-produto-5',
-  },
-  {
-    nome: 'Sacolé 6',
-    imagem: '/produtos/sacoleproduto6.png',
-    descricao: 'Edite com a descrição do sabor.',
-    preco: 'R$ 0,00',
-    link: 'https://marketplace.com/seu-produto-6',
-  },
-  {
-    nome: 'Sacolé 7',
-    imagem: '/produtos/sacoleproduto7.png',
-    descricao: 'Edite com a descrição do sabor.',
-    preco: 'R$ 0,00',
-    link: 'https://marketplace.com/seu-produto-7',
-  },
-  {
-    nome: 'Sacolé 8',
-    imagem: '/produtos/sacoleproduto8.png',
-    descricao: 'Edite com a descrição do sabor.',
-    preco: 'R$ 0,00',
-    link: 'https://marketplace.com/seu-produto-8',
-  },
-  {
-    nome: 'Sacolé 9',
-    imagem: '/produtos/sacoleproduto9.png',
-    descricao: 'Edite com a descrição do sabor.',
-    preco: 'R$ 0,00',
-    link: 'https://marketplace.com/seu-produto-9',
-  },
-];
-
-// Coloque as imagens em /public/sabores/<arquivo>.png (PNG transparente fica melhor).
-// Pode trocar os nomes dos arquivos abaixo se preferir.
-const SABORES_DESTAQUE = [
-  { nome: 'Açaí com Leite Condensado', imagem: '/sabores/sacoledestaque1.png',      tag: 'TOP VENDAS'   },
-  { nome: 'Morango Cremoso',           imagem: '/sabores/sacoledestaque2.png',   tag: 'NOVO'         },
-  { nome: 'Abacaxi com Hortelã',       imagem: '/sabores/sacoledestaque3.png',   tag: 'REFRESCANTE'  },
-  { nome: 'Chocolate Belga',           imagem: '/sabores/sacoledestaque4.png', tag: 'PREMIUM'      },
-];
-
 const PASSOS = [
-  { numero: 1, icone: '🛒', titulo: 'Escolha seu sabor', texto: 'Navegue pelos nossos sacolés e escolha o que mais combina com você.' },
-  { numero: 2, icone: '🔗', titulo: 'Clique no link', texto: 'Você será direcionado para o marketplace onde estamos disponíveis.' },
-  { numero: 3, icone: '📦', titulo: 'Faça seu pedido', texto: 'Finalize a compra de forma rápida e segura no marketplace.' },
-  { numero: 4, icone: '🏖️', titulo: 'Aproveite!', texto: 'Receba em casa e curta aquele verão geladinho com a família.' },
+  { numero: 1, icone: '🍦', titulo: 'Monte seu pedido', texto: 'Escolha os sabores e as quantidades na página de pedido.' },
+  { numero: 2, icone: '💬', titulo: 'Envie no WhatsApp', texto: 'A mensagem já vai prontinha, com os sabores e as quantidades.' },
+  { numero: 3, icone: '🤝', titulo: 'Combine com a gente', texto: 'A gente confirma o pedido, o valor e a entrega ou retirada.' },
+  { numero: 4, icone: '🏖️', titulo: 'Aproveite!', texto: 'Sacolé geladinho na mão. É verão o ano inteiro!' },
 ];
+
+const MENSAGEM_GERAL = 'Olá, Olé Sacolé! 👋 Vim pelo site e quero fazer um pedido.';
+
+function varsLinha(linha) {
+  return { '--cor-linha': linha.cor, '--cor-linha-clara': linha.corClara };
+}
 
 export default function Home() {
+  const [filtro, setFiltro] = useState('todas');
+  const { pedido, itens, totalQtd, totalValor, alterar, limpar } = usePedido();
+
+  // Troca o filtro e, se a pessoa já rolou pra dentro do cardápio,
+  // volta pro começo dele (senão a lista "some" debaixo dela)
+  function escolherFiltro(id) {
+    setFiltro(id);
+    const secao = document.getElementById('cardapio');
+    if (secao && secao.getBoundingClientRect().top < 0) {
+      requestAnimationFrame(() => secao.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
+  }
+
+  const linhasVisiveis = filtro === 'todas' ? LINHAS : LINHAS.filter((l) => l.id === filtro);
+  const temPedido = totalQtd > 0;
+
   return (
     <>
       <Head>
-        <title>Olé Sacolé — Sabor do Verão!</title>
-        <meta name="description" content="Olé Sacolé: sacolés artesanais com sabor de praia. Encontre nossos sabores nos principais marketplaces." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
-          rel="stylesheet"
+        <title>Olé Sacolé — Sacolés artesanais | Peça pelo WhatsApp</title>
+        <meta
+          name="description"
+          content={`Olé Sacolé: ${TOTAL_SABORES} sabores de sacolé artesanal nas linhas Raiz, Olé, Reserva e da Fruta. Monte seu pedido e envie pelo WhatsApp.`}
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <link rel="canonical" href={SITE_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="pt_BR" />
+        <meta property="og:site_name" content="Olé Sacolé" />
+        <meta property="og:title" content="Olé Sacolé — Sabor do Verão em cada Sacolé!" />
+        <meta
+          property="og:description"
+          content={`${TOTAL_SABORES} sabores de sacolé artesanal. Monte seu pedido no site e envie pelo WhatsApp.`}
+        />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:image" content={`${SITE_URL}/og-image.jpg`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      <div className={styles.page}>
-        {/* ============== NAVBAR ============== */}
-        <nav className={styles.navbar}>
-          <div className={styles.logo}>
-            {/* Coloque o arquivo em /public/logo.svg
-                (o Next serve tudo de /public/ na raiz "/"). */}
-            <img
-              src="/logo.svg"
-              alt="Olé Sacolé"
-              className={styles.logoImg}
-            />
-          </div>
-          <ul className={styles.navLinks}>
-            <li><a href="#sobre">Sobre</a></li>
-            <li><a href="#destaques">Sabores</a></li>
-            <li><a href="#produtos">Produtos</a></li>
-            <li><a href="#como-pedir">Como Pedir</a></li>
-            <li><a href="#contato">Contato</a></li>
-          </ul>
-        </nav>
+      <div className={styles.page} data-pedido={temPedido ? 'sim' : 'nao'}>
+        <Navbar paginaAtual="inicio" />
 
         {/* ============== HERO ============== */}
-        <section className={styles.hero}>
+        <section className={styles.hero} id="topo">
           <div className={styles.solContainer} aria-hidden="true">
             <div className={styles.solRaios} />
-            <div className={styles.sol} />
           </div>
           <div className={`${styles.nuvem} ${styles.nuvem1}`} aria-hidden="true" />
           <div className={`${styles.nuvem} ${styles.nuvem2}`} aria-hidden="true" />
 
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitulo}>
-              Sabor do <span>Verão</span><br />
+              Sabor do <span>Verão</span>
+              <br />
               em cada Sacolé!
             </h1>
             <p className={styles.heroSubtitulo}>
-              Geladinhos tropicais e artesanais feitos com frutas de
-             verdade e muito carinho.🌊☀️
+              Sacolés artesanais, cremosos e de fruta, feitos com muito carinho. 🌊☀️
             </p>
             <div className={styles.botoesHero}>
-              <a href="#produtos" className={styles.btnPrimario}>
-                Ver Sabores
+              <a href="/pedido" className={styles.btnPrimario}>
+                Monte seu pedido
               </a>
-              <a href="#como-pedir" className={styles.btnSecundario}>
-                Como Pedir 🛒
+              <a href="#cardapio" className={styles.btnSecundario}>
+                Ver Cardápio
               </a>
             </div>
+            <p className={styles.heroCanais}>
+              {TOTAL_SABORES} sabores
+              {PRECO_MINIMO != null && ` · a partir de ${formatarPreco(PRECO_MINIMO)}`}
+              {' · '}
+              {IFOOD_URL ? 'WhatsApp e iFood' : 'Em breve no iFood'}
+            </p>
           </div>
         </section>
 
@@ -163,22 +124,21 @@ export default function Home() {
                 Sobre a <span>Olé</span>
               </h2>
               <p>
-                Nascemos entre as praias da Região dos Lagos, amamos praia e o 
-                Verão. Cada um dos nossos sabores é feito artesanalmente e com 
-                ingredientes selecionados.
+                Nascemos entre as praias da Região dos Lagos, amamos praia e o Verão. Cada um
+                dos nossos sabores é feito artesanalmente e com ingredientes selecionados.
               </p>
               <p>
-                Acreditamos que felicidade tem gosto de fruta gelada — e é isso 
-                que queremos entregar! 🌞 Vai um sacolé ?
+                Acreditamos que felicidade tem gosto de sacolé gelado, e é isso que queremos
+                entregar! 🌞 Vai um sacolé?
               </p>
               <div className={styles.sobreStats}>
                 <div className={styles.stat}>
-                  <div className={styles.statNumero}>+10</div>
+                  <div className={styles.statNumero}>{TOTAL_SABORES}</div>
                   <div className={styles.statLabel}>Sabores</div>
                 </div>
                 <div className={styles.stat}>
-                  <div className={styles.statNumero}>100%</div>
-                  <div className={styles.statLabel}>Natural</div>
+                  <div className={styles.statNumero}>{LINHAS.length}</div>
+                  <div className={styles.statLabel}>Linhas</div>
                 </div>
                 <div className={styles.stat}>
                   <div className={styles.statNumero}>+100</div>
@@ -187,78 +147,162 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.sobreVisual}>
-              {/* Coloque o arquivo em /public/sacole.png
-                  (PNG com fundo transparente fica melhor).
-                  Ajuste height/bottom em .sacoleFoto para mudar
-                  quanto da imagem fica coberto pela bola de gelo. */}
-              <img
-                src="/sacole.png"
-                alt="Sacolé Olé"
-                className={styles.sacoleFoto}
-              />
+              <picture>
+                <source srcSet="/sacole.webp" type="image/webp" />
+                <img src="/sacole.png" alt="Dois sacolés da Olé" className={styles.sacoleFoto} />
+              </picture>
               <div className={styles.circuloSobre} aria-hidden="true" />
             </div>
           </div>
         </section>
 
-        {/* ============== SABORES EM DESTAQUE ============== */}
-        <section id="destaques" className={`${styles.secao} ${styles.destaques}`}>
+        {/* ============== NOSSAS LINHAS ============== */}
+        <section id="linhas" className={`${styles.secao} ${styles.linhasSecao}`}>
           <h2 className={styles.secaoTitulo}>
-            Sabores em <span>Destaque</span>
+            Nossas <span>Linhas</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Os queridinhos do verão direto pra você!
+            {TOTAL_SABORES} sabores em 4 linhas. Tem pra todo gosto!
           </p>
-          <div className={styles.saboresGrid}>
-            {SABORES_DESTAQUE.map((sabor, i) => (
-              <div key={i} className={styles.saborCard}>
-                <img
-                  src={sabor.imagem}
-                  alt={sabor.nome}
-                  className={styles.saborImg}
-                />
-                <h3 className={styles.saborNome}>{sabor.nome}</h3>
-                <span className={styles.saborTag}>{sabor.tag}</span>
-              </div>
+          <div className={styles.linhasGrid}>
+            {LINHAS.map((linha) => (
+              <a
+                key={linha.id}
+                href="#cardapio"
+                onClick={() => setFiltro(linha.id)}
+                className={styles.linhaCard}
+                style={varsLinha(linha)}
+              >
+                <div className={styles.linhaLeque} aria-hidden="true">
+                  {linha.sabores.slice(0, 3).map((s) => (
+                    <SacoleIcon key={s.nome} cor={s.cor} textura={s.textura} cor2={s.cor2} className={styles.linhaLequeItem} />
+                  ))}
+                </div>
+                <div className={styles.linhaInfo}>
+                  <span className={styles.linhaRotulo}>Linha</span>
+                  <h3 className={styles.linhaNome}>
+                    {linha.nome}
+                    {linha.selo && <span className={styles.linhaSelo}>{linha.selo}</span>}
+                  </h3>
+                  <p className={styles.linhaSlogan}>{linha.slogan}</p>
+                  <span className={styles.linhaVer}>
+                    Ver {linha.sabores.length} sabores →
+                  </span>
+                  {linha.preco != null && (
+                    <span className={styles.linhaCardPreco}>{formatarPreco(linha.preco)}</span>
+                  )}
+                </div>
+              </a>
             ))}
           </div>
         </section>
 
-        {/* ============== PRODUTOS ============== */}
-        <section id="produtos" className={`${styles.secao} ${styles.produtos}`}>
+        {/* ============== CARDÁPIO ============== */}
+        <section id="cardapio" className={`${styles.secao} ${styles.cardapio}`}>
           <h2 className={styles.secaoTitulo}>
-            Nossos <span>Sacolés</span>
+            Nosso <span>Cardápio</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Clique e compre direto no link 🛍️
+            Toque no <strong>+</strong> pra ir separando os sabores, ou{' '}
+            <a href="/pedido" className={styles.linkTexto}>monte seu pedido</a> de uma vez. 💬
           </p>
-          <div className={styles.produtosGrid}>
-            {PRODUTOS.map((produto, i) => (
-              <article key={i} className={styles.produtoCard}>
-                <div className={styles.produtoImagem}>
-                  <img
-                    src={produto.imagem}
-                    alt={produto.nome}
-                    className={styles.produtoImg}
-                  />
-                </div>
-                <div className={styles.produtoInfo}>
-                  <h3 className={styles.produtoNome}>{produto.nome}</h3>
-                  <p className={styles.produtoDesc}>{produto.descricao}</p>
-                  <div className={styles.produtoRodape}>
-                    <span className={styles.produtoPreco}>{produto.preco}</span>
-                    <a
-                      href={produto.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.produtoBtn}
-                    >
-                      Comprar →
-                    </a>
-                  </div>
-                </div>
-              </article>
+
+          <div className={styles.filtros} role="group" aria-label="Filtrar por linha">
+            <button
+              type="button"
+              className={styles.filtroBtn}
+              aria-pressed={filtro === 'todas'}
+              onClick={() => escolherFiltro('todas')}
+            >
+              Todas
+            </button>
+            {LINHAS.map((linha) => (
+              <button
+                key={linha.id}
+                type="button"
+                className={styles.filtroBtn}
+                style={varsLinha(linha)}
+                aria-pressed={filtro === linha.id}
+                onClick={() => escolherFiltro(linha.id)}
+              >
+                {linha.nome}
+              </button>
             ))}
+          </div>
+
+          {linhasVisiveis.map((linha) => (
+            <div key={linha.id} className={styles.linhaBloco} style={varsLinha(linha)}>
+              <div className={styles.linhaCabecalho}>
+                <h3 className={styles.linhaBlocoTitulo}>
+                  {tituloLinha(linha)}
+                  {linha.selo && <span className={styles.linhaSelo}>{linha.selo}</span>}
+                </h3>
+                <p className={styles.linhaBlocoSlogan}>{linha.slogan}</p>
+                {linha.preco != null && (
+                  <span className={styles.linhaPreco}>
+                    {formatarPreco(linha.preco)} <small>cada</small>
+                  </span>
+                )}
+              </div>
+
+              <div className={styles.saboresGrid}>
+                {linha.sabores.map((sabor) => {
+                  const id = idSabor(linha, sabor);
+                  const qtd = pedido[id] || 0;
+                  return (
+                    <article
+                      key={id}
+                      className={`${styles.saborCard} ${qtd > 0 ? styles.saborCardAtivo : ''}`}
+                    >
+                      <div className={styles.saborVisual}>
+                        <SacoleIcon cor={sabor.cor} textura={sabor.textura} cor2={sabor.cor2} className={styles.saborIcone} />
+                        {qtd > 0 && <span className={styles.saborBadge}>{qtd}</span>}
+                      </div>
+                      <div className={styles.saborInfo}>
+                        <h4 className={styles.saborNome}>{sabor.nome}</h4>
+                        <p className={styles.saborDesc}>{sabor.descricao}</p>
+                        {qtd === 0 ? (
+                          <button
+                            type="button"
+                            className={styles.btnAdicionar}
+                            onClick={() => alterar(id, 1)}
+                            aria-label={`Adicionar ${sabor.nome} ao pedido`}
+                          >
+                            <IconeMais width={18} height={18} /> Adicionar
+                          </button>
+                        ) : (
+                          <div className={styles.stepper}>
+                            <button
+                              type="button"
+                              onClick={() => alterar(id, -1)}
+                              aria-label={`Tirar um ${sabor.nome}`}
+                            >
+                              <IconeMenos width={18} height={18} />
+                            </button>
+                            <span aria-live="polite" aria-label={`${qtd} no pedido`}>
+                              {qtd}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => alterar(id, 1)}
+                              aria-label={`Adicionar mais um ${sabor.nome}`}
+                            >
+                              <IconeMais width={18} height={18} />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+
+          <div className={styles.cardapioCta}>
+            <a href="/pedido" className={styles.btnPrimario}>
+              Monte seu pedido →
+            </a>
           </div>
         </section>
 
@@ -268,17 +312,60 @@ export default function Home() {
             Como <span>Pedir</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Em 4 passinhos simples seu sacolé chega na sua casa!
+            Em 4 passinhos o seu sacolé tá garantido!
           </p>
           <div className={styles.passosGrid}>
             {PASSOS.map((passo) => (
               <div key={passo.numero} className={styles.passoCard}>
                 <div className={styles.passoNumero}>{passo.numero}</div>
-                <div className={styles.passoIcone}>{passo.icone}</div>
+                <div className={styles.passoIcone} aria-hidden="true">{passo.icone}</div>
                 <h3 className={styles.passoTitulo}>{passo.titulo}</h3>
                 <p className={styles.passoTexto}>{passo.texto}</p>
               </div>
             ))}
+          </div>
+
+          <div className={styles.canais}>
+            <div className={`${styles.canalCard} ${styles.canalWhats}`}>
+              <div className={styles.canalIcone}><IconeChat width={28} height={28} /></div>
+              <h3>WhatsApp</h3>
+              <p>Pedidos e encomendas especiais.</p>
+              <a href="/pedido" className={styles.canalBtn}>
+                Monte seu pedido
+              </a>
+              <a
+                href={linkWhatsApp(MENSAGEM_GERAL)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.canalDetalhe}
+              >
+                ou chame no {WHATSAPP_EXIBICAO}
+              </a>
+            </div>
+
+            <div className={`${styles.canalCard} ${styles.canalIfood}`}>
+              <div className={styles.canalIcone}><IconeSacola width={28} height={28} /></div>
+              <h3>iFood</h3>
+              {IFOOD_URL ? (
+                <>
+                  <p>Peça pelo app e receba em casa.</p>
+                  <a href={IFOOD_URL} target="_blank" rel="noopener noreferrer" className={styles.canalBtn}>
+                    Pedir no iFood
+                  </a>
+                </>
+              ) : (
+                <>
+                  <p>Nossa loja no iFood está chegando!</p>
+                  <span className={styles.emBreve}>Em breve</span>
+                </>
+              )}
+            </div>
+
+            <div className={`${styles.canalCard} ${styles.canalPraia}`}>
+              <div className={styles.canalIcone}><IconeLocal width={28} height={28} /></div>
+              <h3>Na praia</h3>
+              <p>Também vendemos direto na areia. ☀️</p>
+            </div>
           </div>
         </section>
 
@@ -288,64 +375,65 @@ export default function Home() {
             Fale com a <span>gente!</span>
           </h2>
           <p className={styles.secaoSubtitulo}>
-            Tá com vontade de um sacolé ou quer fazer uma encomenda especial?
-            Manda mensagem pra gente nas redes sociais!
+            Tá com vontade de um sacolé ou quer fazer uma encomenda especial? Chama a gente!
           </p>
           <div className={styles.redesSociais}>
-            <a href="https://instagram.com/olesacoleoficial" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="Instagram">📸</a>
-            <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="WhatsApp">💬</a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="Facebook">👍</a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className={styles.redeBtn} aria-label="TikTok">🎵</a>
+            <a
+              href={linkWhatsApp(MENSAGEM_GERAL)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${styles.redeBtn} ${styles.redeWhats}`}
+            >
+              <IconeChat /> WhatsApp
+            </a>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className={styles.redeBtn}>
+              <IconeCamera /> Instagram
+            </a>
+            {IFOOD_URL && (
+              <a href={IFOOD_URL} target="_blank" rel="noopener noreferrer" className={styles.redeBtn}>
+                <IconeSacola /> iFood
+              </a>
+            )}
           </div>
-          <a href="mailto:olesacole@gmail.com" className={styles.contatoEmail}>
-            📧 olesacole@gmail.com
+          <a href={`mailto:${EMAIL}`} className={styles.contatoEmail}>
+            <IconeEmail /> {EMAIL}
           </a>
         </section>
 
-        {/* ============== MAR (final do body) ============== */}
-        <div className={styles.mar} aria-hidden="true">
-          <div className={`${styles.ondaMar} ${styles.ondaMar1}`} />
-          <div className={`${styles.ondaMar} ${styles.ondaMar2}`} />
-          <div className={`${styles.ondaMar} ${styles.ondaMar3}`} />
-        </div>
+        <Rodape />
 
-        {/* ============== FOOTER (AREIA) ============== */}
-        <footer className={styles.footer}>
-          <div className={styles.footerConteudo}>
-            <div className={styles.footerColuna}>
-              {/* Mesmo arquivo /public/logo.svg usado no header */}
-              <img
-                src="/logo.svg"
-                alt="Olé Sacolé"
-                className={styles.footerLogoImg}
-              />
-              <p>O sabor do verão, direto pra você!</p>
+        {/* ============== PEDIDO EM ANDAMENTO / WHATSAPP FIXO ============== */}
+        {temPedido ? (
+          <div className={styles.barraPedido} role="region" aria-label="Seu pedido">
+            <div className={styles.barraResumo}>
+              <strong>
+                {totalQtd} {plural(totalQtd, 'sacolé', 'sacolés')}
+              </strong>
+              <span>
+                {totalValor != null
+                  ? formatarPreco(totalValor)
+                  : `${itens.length} ${plural(itens.length, 'sabor', 'sabores')}`}
+              </span>
             </div>
-            <div className={styles.footerColuna}>
-              <h4>Navegação</h4>
-              <a href="#sobre">Sobre nós</a>
-              <a href="#destaques">Sabores</a>
-              <a href="#produtos">Produtos</a>
-              <a href="#como-pedir">Como pedir</a>
-            </div>
-            <div className={styles.footerColuna}>
-              <h4>Contato</h4>
-              <p>📧 olesacole@gmail.com</p>
-              <p>📱 (00) 00000-0000</p>
-              <p>📍 Peró - Cabo Frio</p>
-            </div>
-            <div className={styles.footerColuna}>
-              <h4>Siga a gente</h4>
-              <a href="https://instagram.com/olesacoleoficial" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
-              <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
-              <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
-            </div>
+            <button type="button" className={styles.barraLimpar} onClick={limpar}>
+              Limpar
+            </button>
+            <a href="/pedido" className={styles.barraEnviar}>
+              Finalizar<span className={styles.textoLongo}> pedido</span> →
+            </a>
           </div>
-
-          <div className={styles.copyright}>
-            © {new Date().getFullYear()} Olé Sacolé — Feito entre ☀️ e 🌊
-          </div>
-        </footer>
+        ) : (
+          <a
+            href={linkWhatsApp(MENSAGEM_GERAL)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.whatsFlutuante}
+            aria-label="Falar no WhatsApp"
+          >
+            <IconeChat width={26} height={26} />
+            <span>Fale no WhatsApp</span>
+          </a>
+        )}
       </div>
     </>
   );

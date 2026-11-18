@@ -107,6 +107,25 @@ button {
   color: #fff;
 }
 
+/* Contorno visível ao navegar pelo teclado */
+:focus-visible {
+  outline: 3px solid var(--amarelo-sol);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* Remove o "flash" azul ao tocar em botões no celular */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* NOTA: os @keyframes foram movidos para Home.module.css
    por causa do escopamento do CSS Modules do Next.js
    (que renomeia nomes de animações com hash, quebrando
