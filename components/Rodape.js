@@ -26,6 +26,13 @@ export default function Rodape() {
         <div className={`${styles.ondaMar} ${styles.ondaMar3}`} />
       </div>
 
+      {/* Beira da praia: água rasa, espuma indo e voltando e areia molhada */}
+      <div className={styles.beira} aria-hidden="true">
+        <div className={styles.beiraAreia} />
+        <div className={styles.espumaFina} />
+        <div className={styles.espuma} />
+      </div>
+
       <footer className={styles.footer}>
         <div className={styles.footerConteudo}>
           <div className={styles.footerColuna}>

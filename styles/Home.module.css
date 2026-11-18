@@ -1062,9 +1062,10 @@
 /* =========== MAR (final do body) =========== */
 .mar {
   position: relative;
-  height: 260px;
-  /* Mesmo clareamento de ~20% aplicado ao restante do fundo */
-  background: linear-gradient(180deg, #33abd2 0%, #3565a1 100%);
+  height: 180px;
+  /* Mar ficando mais claro perto da areia (água rasa) */
+  /* Começa transparente pra emendar com o fundo da página, sem linha reta */
+  background: linear-gradient(180deg, rgba(51, 171, 210, 0) 0%, #33abd2 35%, #2f93c8 70%, #3a9fcb 100%);
   overflow: hidden;
 }
 
@@ -1075,6 +1076,9 @@
   height: 100px;
   background-repeat: repeat-x;
   background-size: 50% 100%; /* cada SVG ocupa 50% (= 1 tela) e repete uma vez para o loop ser perfeito */
+  /* Some suavemente embaixo (antes ficava uma faixa reta no fim de cada onda) */
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
 }
 
 .ondaMar1 {
@@ -1097,26 +1101,70 @@
   animation: onda 12s linear infinite;
 }
 
+/* =========== BEIRA DA PRAIA (água rasa → espuma → areia) =========== */
+@keyframes espumaVaiVem {
+  0%, 100% { transform: translateY(-4px); }
+  50% { transform: translateY(5px); }
+}
+
+@keyframes espumaRecua {
+  0%, 100% { transform: translateY(-7px); opacity: 0.3; }
+  50% { transform: translateY(1px); opacity: 0.75; }
+}
+
+@keyframes espumaDeriva {
+  from { background-position-x: 0; }
+  to { background-position-x: 600px; }
+}
+
+@keyframes espumaDerivaVolta {
+  from { background-position-x: 0; }
+  to { background-position-x: -600px; }
+}
+
+.beira {
+  position: relative;
+  height: 120px;
+  margin-top: -1px;
+  overflow: hidden;
+  /* Água rasa, cor de piscina, chegando na areia */
+  background: linear-gradient(180deg, #3a9fcb 0%, #56c0d6 38%, #7dd6df 60%, #7dd6df 100%);
+}
+
+.beiraAreia,
+.espuma,
+.espumaFina {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  background-size: 600px 120px;
+}
+
+/* Areia molhada (mais escura) clareando até a areia seca do rodapé */
+.beiraAreia {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='120' viewBox='0 0 600 120'><defs><linearGradient id='a' x1='0' y1='0' x2='0' y2='1' gradientUnits='objectBoundingBox'><stop offset='0' stop-color='%23d6b874'/><stop offset='0.45' stop-color='%23e8cc8a'/><stop offset='1' stop-color='%23f7e1a0'/></linearGradient></defs><path d='M0,56 C100,44 200,68 300,56 C400,44 500,68 600,56 L600,120 L0,120 Z' fill='url(%23a)'/><path d='M0,65 C100,53 200,77 300,65 C400,53 500,77 600,65' fill='none' stroke='%23c4a25c' stroke-opacity='0.35' stroke-width='2'/></svg>");
+}
+
+/* Espuma principal + bolhinhas: vai e volta na areia */
+.espuma {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='120' viewBox='0 0 600 120'><path d='M0,56 C100,44 200,68 300,56 C400,44 500,68 600,56' fill='none' stroke='%23fff' stroke-width='11' stroke-linecap='round' opacity='0.95' transform='translate(0 -3)'/><circle cx='0' cy='49.5' r='5.8' fill='%23fff' opacity='0.9'/><circle cx='600' cy='49.5' r='5.8' fill='%23fff' opacity='0.8'/><circle cx='12.2' cy='48.5' r='6' fill='%23fff' opacity='0.9'/><circle cx='21.4' cy='47.7' r='6.2' fill='%23fff' opacity='0.8'/><circle cx='33' cy='46.9' r='7.8' fill='%23fff' opacity='0.9'/><circle cx='45.8' cy='45' r='8.3' fill='%23fff' opacity='0.9'/><circle cx='60.6' cy='44' r='4.7' fill='%23fff' opacity='0.9'/><circle cx='70.5' cy='45.6' r='5' fill='%23fff' opacity='0.9'/><circle cx='80.6' cy='44.8' r='6.8' fill='%23fff' opacity='0.9'/><circle cx='92.8' cy='46.9' r='4.8' fill='%23fff' opacity='0.9'/><circle cx='105.9' cy='46.6' r='6.2' fill='%23fff' opacity='0.9'/><circle cx='117.6' cy='45.8' r='5.7' fill='%23fff' opacity='0.9'/><circle cx='128.1' cy='47.1' r='6.8' fill='%23fff' opacity='1'/><circle cx='141.5' cy='46.6' r='5.7' fill='%23fff' opacity='0.8'/><circle cx='153' cy='49.7' r='7.5' fill='%23fff' opacity='0.9'/><circle cx='162.2' cy='48.4' r='7.2' fill='%23fff' opacity='0.9'/><circle cx='176.5' cy='49.5' r='5.8' fill='%23fff' opacity='0.9'/><circle cx='189' cy='49.7' r='6.3' fill='%23fff' opacity='1'/><circle cx='200.8' cy='52.5' r='7.2' fill='%23fff' opacity='0.9'/><circle cx='213.7' cy='50.7' r='8.5' fill='%23fff' opacity='0.9'/><circle cx='225' cy='53.3' r='7.2' fill='%23fff' opacity='0.9'/><circle cx='235' cy='53.3' r='5' fill='%23fff' opacity='0.9'/><circle cx='244.8' cy='52.2' r='5.5' fill='%23fff' opacity='1'/><circle cx='254.3' cy='51.6' r='6.3' fill='%23fff' opacity='1'/><circle cx='268.2' cy='51.9' r='8' fill='%23fff' opacity='0.9'/><circle cx='279.3' cy='49.1' r='8' fill='%23fff' opacity='0.8'/><circle cx='289.4' cy='50.4' r='5.4' fill='%23fff' opacity='0.9'/><circle cx='301.9' cy='49.8' r='5.6' fill='%23fff' opacity='0.9'/><circle cx='313.2' cy='45.8' r='6.8' fill='%23fff' opacity='0.9'/><circle cx='325.2' cy='45.7' r='7' fill='%23fff' opacity='0.8'/><circle cx='339.6' cy='44.3' r='7.6' fill='%23fff' opacity='0.9'/><circle cx='351' cy='46.3' r='6.1' fill='%23fff' opacity='0.9'/><circle cx='360.4' cy='45.9' r='4.8' fill='%23fff' opacity='0.8'/><circle cx='371.4' cy='46.6' r='4.7' fill='%23fff' opacity='0.8'/><circle cx='381' cy='46.7' r='6' fill='%23fff' opacity='1'/><circle cx='393.7' cy='46.3' r='5.1' fill='%23fff' opacity='0.9'/><circle cx='404.9' cy='45' r='5' fill='%23fff' opacity='1'/><circle cx='416.7' cy='47.8' r='6.4' fill='%23fff' opacity='0.8'/><circle cx='427.7' cy='46.2' r='5.6' fill='%23fff' opacity='0.8'/><circle cx='436.9' cy='47.6' r='8.3' fill='%23fff' opacity='0.8'/><circle cx='449.1' cy='48.4' r='4.6' fill='%23fff' opacity='1'/><circle cx='463.3' cy='50' r='7.3' fill='%23fff' opacity='0.9'/><circle cx='473.3' cy='49.8' r='7.6' fill='%23fff' opacity='0.9'/><circle cx='484.3' cy='49.5' r='5.4' fill='%23fff' opacity='1'/><circle cx='498.4' cy='50.1' r='7.7' fill='%23fff' opacity='0.9'/><circle cx='508.8' cy='51.9' r='6.6' fill='%23fff' opacity='0.8'/><circle cx='517.9' cy='52.5' r='5.6' fill='%23fff' opacity='0.9'/><circle cx='532.7' cy='50.6' r='6.3' fill='%23fff' opacity='1'/><circle cx='547.4' cy='52.7' r='6' fill='%23fff' opacity='0.9'/><circle cx='557.6' cy='51.3' r='5.3' fill='%23fff' opacity='1'/><circle cx='571.6' cy='50.5' r='6.4' fill='%23fff' opacity='0.9'/><circle cx='581.1' cy='49.1' r='7.1' fill='%23fff' opacity='0.9'/><circle cx='594.6' cy='50.1' r='6.4' fill='%23fff' opacity='0.9'/><circle cx='-5.4' cy='50.1' r='6.4' fill='%23fff' opacity='0.9'/><circle cx='583' cy='39.1' r='1.8' fill='%23fff' opacity='0.9'/><circle cx='434.9' cy='40.3' r='1.5' fill='%23fff' opacity='0.5'/><circle cx='542.9' cy='44.4' r='2.5' fill='%23fff' opacity='0.8'/><circle cx='588.2' cy='39.3' r='2.3' fill='%23fff' opacity='0.7'/><circle cx='78.6' cy='26.1' r='1.2' fill='%23fff' opacity='0.7'/><circle cx='315.9' cy='35.3' r='2.7' fill='%23fff' opacity='0.8'/><circle cx='495.7' cy='42' r='1.5' fill='%23fff' opacity='0.6'/><circle cx='144.3' cy='39' r='2.1' fill='%23fff' opacity='0.6'/><circle cx='78.6' cy='34.7' r='2.7' fill='%23fff' opacity='0.7'/><circle cx='350' cy='33.8' r='2.6' fill='%23fff' opacity='0.9'/><circle cx='301' cy='35.6' r='2.1' fill='%23fff' opacity='0.5'/><circle cx='264.1' cy='45.8' r='1.5' fill='%23fff' opacity='0.8'/><circle cx='103.4' cy='30.3' r='2' fill='%23fff' opacity='0.7'/><circle cx='195.6' cy='37.7' r='2' fill='%23fff' opacity='0.8'/><circle cx='63.7' cy='36.1' r='2.1' fill='%23fff' opacity='0.6'/><circle cx='463.4' cy='35.9' r='2' fill='%23fff' opacity='0.8'/><circle cx='547.5' cy='37.8' r='1.9' fill='%23fff' opacity='0.7'/><circle cx='307.3' cy='35.9' r='2.3' fill='%23fff' opacity='0.7'/><circle cx='286.8' cy='34.6' r='2.7' fill='%23fff' opacity='0.8'/><circle cx='565.3' cy='38' r='1.6' fill='%23fff' opacity='0.9'/><circle cx='504' cy='44.1' r='1.4' fill='%23fff' opacity='0.6'/><circle cx='43.5' cy='38.8' r='1.6' fill='%23fff' opacity='0.8'/><circle cx='470.4' cy='42' r='2.6' fill='%23fff' opacity='0.8'/><circle cx='396.2' cy='27.8' r='1.4' fill='%23fff' opacity='0.9'/><circle cx='131.8' cy='36.3' r='2.7' fill='%23fff' opacity='0.7'/><circle cx='593.9' cy='41.4' r='2.5' fill='%23fff' opacity='0.6'/><circle cx='309.4' cy='39.2' r='1.7' fill='%23fff' opacity='0.6'/><circle cx='433.3' cy='34.3' r='1.2' fill='%23fff' opacity='0.6'/><circle cx='10.8' cy='33.1' r='1.7' fill='%23fff' opacity='0.7'/><circle cx='38.6' cy='29' r='2.8' fill='%23fff' opacity='0.9'/><circle cx='62.9' cy='39' r='1.6' fill='%23fff' opacity='0.8'/><circle cx='162.3' cy='37.8' r='1.4' fill='%23fff' opacity='0.9'/><circle cx='491.4' cy='43.2' r='1.6' fill='%23fff' opacity='0.9'/><circle cx='342.4' cy='38.6' r='2.3' fill='%23fff' opacity='0.5'/><circle cx='412.9' cy='39.9' r='1.9' fill='%23fff' opacity='0.9'/><circle cx='380.7' cy='38.6' r='2.5' fill='%23fff' opacity='0.8'/><circle cx='40' cy='33.6' r='2.6' fill='%23fff' opacity='0.6'/><circle cx='331.8' cy='36.6' r='2.7' fill='%23fff' opacity='0.5'/><circle cx='316.1' cy='39.8' r='1.6' fill='%23fff' opacity='0.5'/><circle cx='30.2' cy='36' r='1.5' fill='%23fff' opacity='0.6'/><circle cx='455.7' cy='36.3' r='1.7' fill='%23fff' opacity='0.5'/><circle cx='208.2' cy='42.5' r='1.2' fill='%23fff' opacity='0.5'/><circle cx='439.8' cy='39.7' r='2.1' fill='%23fff' opacity='0.7'/><circle cx='560.8' cy='34.6' r='1.4' fill='%23fff' opacity='0.6'/><circle cx='297' cy='37.8' r='2.5' fill='%23fff' opacity='0.7'/><circle cx='412.6' cy='36.1' r='2.8' fill='%23fff' opacity='0.8'/><circle cx='424' cy='65.1' r='1.6' fill='%23fff' opacity='0.5'/><circle cx='32.6' cy='60.9' r='1.1' fill='%23fff' opacity='0.6'/><circle cx='153.4' cy='64' r='1.2' fill='%23fff' opacity='0.6'/><circle cx='522.3' cy='68.9' r='1.7' fill='%23fff' opacity='0.4'/><circle cx='175.8' cy='65.9' r='1.5' fill='%23fff' opacity='0.5'/><circle cx='157.9' cy='72.2' r='2' fill='%23fff' opacity='0.5'/><circle cx='146.7' cy='65.6' r='2' fill='%23fff' opacity='0.5'/><circle cx='0.6' cy='67.2' r='1.4' fill='%23fff' opacity='0.5'/><circle cx='600.6' cy='67.2' r='1.4' fill='%23fff' opacity='0.4'/><circle cx='302.8' cy='65' r='1' fill='%23fff' opacity='0.4'/><circle cx='239.7' cy='66.7' r='1' fill='%23fff' opacity='0.5'/><circle cx='139.7' cy='67.1' r='1.6' fill='%23fff' opacity='0.6'/><circle cx='394.5' cy='68' r='1.7' fill='%23fff' opacity='0.5'/><circle cx='195.7' cy='66.8' r='2' fill='%23fff' opacity='0.6'/><circle cx='385.9' cy='67.4' r='1' fill='%23fff' opacity='0.7'/><circle cx='376.4' cy='67' r='1.7' fill='%23fff' opacity='0.4'/><circle cx='314.3' cy='69' r='1.5' fill='%23fff' opacity='0.6'/><circle cx='495.8' cy='73.5' r='1.6' fill='%23fff' opacity='0.6'/><circle cx='416' cy='61.3' r='1.2' fill='%23fff' opacity='0.4'/><circle cx='216.4' cy='73.7' r='1.1' fill='%23fff' opacity='0.5'/><circle cx='376.7' cy='65.8' r='1.6' fill='%23fff' opacity='0.5'/><circle cx='2' cy='69.5' r='1.8' fill='%23fff' opacity='0.5'/><circle cx='321.1' cy='61.6' r='1.7' fill='%23fff' opacity='0.6'/></svg>");
+  animation: espumaVaiVem 5s ease-in-out infinite, espumaDeriva 80s linear infinite;
+}
+
+/* Espuma fina da onda que está voltando pro mar */
+.espumaFina {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='120' viewBox='0 0 600 120'><circle cx='0' cy='40.7' r='2.5' fill='%23fff'/><circle cx='600' cy='40.7' r='2.5' fill='%23fff'/><circle cx='7.5' cy='39.7' r='3.2' fill='%23fff'/><circle cx='15.7' cy='41.1' r='3.8' fill='%23fff'/><circle cx='22.7' cy='39.9' r='2.7' fill='%23fff'/><circle cx='29.2' cy='40.3' r='3.4' fill='%23fff'/><circle cx='37.4' cy='41.1' r='2.7' fill='%23fff'/><circle cx='42.6' cy='42.8' r='4.2' fill='%23fff'/><circle cx='51.1' cy='40.9' r='3.4' fill='%23fff'/><circle cx='57.4' cy='41.3' r='3.2' fill='%23fff'/><circle cx='66.2' cy='41.4' r='2.9' fill='%23fff'/><circle cx='74.5' cy='43.7' r='2.4' fill='%23fff'/><circle cx='81.3' cy='41.8' r='3.3' fill='%23fff'/><circle cx='88.2' cy='40.7' r='2.6' fill='%23fff'/><circle cx='96.7' cy='42.6' r='2.7' fill='%23fff'/><circle cx='102.5' cy='42.6' r='4.1' fill='%23fff'/><circle cx='110.5' cy='41.1' r='3.7' fill='%23fff'/><circle cx='118.4' cy='40.2' r='2.4' fill='%23fff'/><circle cx='126.7' cy='40.6' r='2.6' fill='%23fff'/><circle cx='135.3' cy='38' r='3' fill='%23fff'/><circle cx='142.1' cy='39.2' r='3' fill='%23fff'/><circle cx='148.7' cy='35.9' r='2.3' fill='%23fff'/><circle cx='156.5' cy='36.6' r='4.2' fill='%23fff'/><circle cx='163.5' cy='37' r='3.3' fill='%23fff'/><circle cx='169.4' cy='36.1' r='3.4' fill='%23fff'/><circle cx='176.9' cy='34.7' r='2.6' fill='%23fff'/><circle cx='183.3' cy='35.2' r='4.1' fill='%23fff'/><circle cx='190.6' cy='34.4' r='2.8' fill='%23fff'/><circle cx='195.9' cy='36.4' r='3.8' fill='%23fff'/><circle cx='202.4' cy='36.1' r='3.6' fill='%23fff'/><circle cx='211' cy='35.5' r='4.1' fill='%23fff'/><circle cx='220' cy='36.2' r='4.1' fill='%23fff'/><circle cx='228.5' cy='35.9' r='3.2' fill='%23fff'/><circle cx='234.5' cy='35.5' r='4' fill='%23fff'/><circle cx='239.8' cy='37.6' r='3.8' fill='%23fff'/><circle cx='246.7' cy='35.8' r='3.9' fill='%23fff'/><circle cx='252.7' cy='37.2' r='2.8' fill='%23fff'/><circle cx='258.4' cy='37.2' r='2.3' fill='%23fff'/><circle cx='267' cy='39' r='4.2' fill='%23fff'/><circle cx='273.9' cy='40' r='2.7' fill='%23fff'/><circle cx='281' cy='37.6' r='3.7' fill='%23fff'/><circle cx='286.9' cy='40.3' r='3.9' fill='%23fff'/><circle cx='295.4' cy='39.7' r='3.4' fill='%23fff'/><circle cx='302.7' cy='39.8' r='3.9' fill='%23fff'/><circle cx='309.9' cy='41.5' r='2.8' fill='%23fff'/><circle cx='314.9' cy='42.3' r='3.6' fill='%23fff'/><circle cx='320' cy='41.7' r='3.4' fill='%23fff'/><circle cx='328.4' cy='40.9' r='3.4' fill='%23fff'/><circle cx='335' cy='43.1' r='4.1' fill='%23fff'/><circle cx='340.6' cy='40.8' r='2.4' fill='%23fff'/><circle cx='345.7' cy='41.1' r='3.1' fill='%23fff'/><circle cx='354.1' cy='41.2' r='3.5' fill='%23fff'/><circle cx='361.3' cy='42.4' r='2.8' fill='%23fff'/><circle cx='367.2' cy='41.5' r='2.5' fill='%23fff'/><circle cx='373.7' cy='42.6' r='3.6' fill='%23fff'/><circle cx='378.9' cy='43.5' r='3.6' fill='%23fff'/><circle cx='387' cy='40.7' r='3.8' fill='%23fff'/><circle cx='393.8' cy='42.7' r='2.3' fill='%23fff'/><circle cx='399.5' cy='40.9' r='3.6' fill='%23fff'/><circle cx='407.3' cy='39.8' r='2.8' fill='%23fff'/><circle cx='413.9' cy='41.8' r='2.8' fill='%23fff'/><circle cx='420' cy='40.2' r='3.2' fill='%23fff'/><circle cx='428.8' cy='39.4' r='2.4' fill='%23fff'/><circle cx='435.9' cy='39.7' r='3.7' fill='%23fff'/><circle cx='442.1' cy='37.8' r='3.6' fill='%23fff'/><circle cx='449.3' cy='38.1' r='2.3' fill='%23fff'/><circle cx='458.3' cy='36' r='2.9' fill='%23fff'/><circle cx='467.2' cy='34.8' r='2.4' fill='%23fff'/><circle cx='472.5' cy='36.6' r='3.8' fill='%23fff'/><circle cx='479.3' cy='34.2' r='3.4' fill='%23fff'/><circle cx='486.9' cy='35.6' r='3.1' fill='%23fff'/><circle cx='493.4' cy='34.7' r='3' fill='%23fff'/><circle cx='498.6' cy='34.8' r='3.1' fill='%23fff'/><circle cx='506.5' cy='36.3' r='3.8' fill='%23fff'/><circle cx='513.3' cy='35.4' r='2.7' fill='%23fff'/><circle cx='520.2' cy='37.4' r='3.5' fill='%23fff'/><circle cx='525.6' cy='36.1' r='3.2' fill='%23fff'/><circle cx='533.4' cy='37.3' r='4' fill='%23fff'/><circle cx='540.9' cy='37.3' r='3.7' fill='%23fff'/><circle cx='549.4' cy='37.8' r='3.6' fill='%23fff'/><circle cx='555.4' cy='37.2' r='4' fill='%23fff'/><circle cx='562.8' cy='39.4' r='3.8' fill='%23fff'/><circle cx='571.8' cy='37.9' r='2.2' fill='%23fff'/><circle cx='578' cy='37.8' r='3' fill='%23fff'/><circle cx='585.2' cy='38.7' r='2.4' fill='%23fff'/><circle cx='594' cy='39.7' r='3.7' fill='%23fff'/><circle cx='599.4' cy='40.8' r='4.1' fill='%23fff'/><circle cx='-0.6' cy='40.8' r='4.1' fill='%23fff'/></svg>");
+  animation: espumaRecua 5s ease-in-out infinite, espumaDerivaVolta 110s linear infinite;
+  animation-delay: -2.5s, 0s;
+}
+
 /* =========== FOOTER (AREIA) =========== */
 .footer {
   position: relative;
   background: linear-gradient(180deg, var(--areia) 0%, var(--areia-escura) 100%);
-  padding: 70px 24px 30px;
+  padding: 46px 24px 30px;
   color: #6b4a14;
   overflow: hidden;
-}
-
-/* Topo da areia ondulado (transição mar -> areia) */
-.footer::before {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'><path d='M0,20 Q150,0 300,20 T600,20 T900,20 T1200,20 L1200,0 L0,0 Z' fill='%233565a1'/></svg>");
-  background-repeat: repeat-x;
-  background-size: 1200px 40px;
 }
 
 /* Pegadas / conchas decorativas (sutil textura granulada) */
@@ -1452,7 +1500,9 @@
   .ondaMar3,
   .linhaBloco,
   .barraPedido,
-  .saborBadge {
+  .saborBadge,
+  .espuma,
+  .espumaFina {
     animation: none !important;
   }
 
